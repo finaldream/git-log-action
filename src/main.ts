@@ -5,43 +5,28 @@ async function run(): Promise<void> {
   try {
     const git: SimpleGit = simpleGit()
 
-    const tags = await git.tags()
-
-    const previousTag =
-      tags.all.length < 2 ? undefined : tags.all[tags.all.length - 2]
-    const latestTag =
-      tags.all.length < 1 ? undefined : tags.all[tags.all.length - 1]
+    const baseRef = process.env.GITHUB_BASE_REF
+    const headRef = process.env.GITHUB_HEAD_REF
 
     const commits = await git.log({
-      from: previousTag,
-      to: latestTag,
+      from: baseRef,
+      to: headRef,
       format: {
-        abbrev: '%h',
-        author: '@%an',
         message: '%s'
       },
       splitter: '\n',
       multiLine: false
     })
 
-    let textLog = ''
-    let markdownLog = ''
+    const log = commits.all.map(commit => `* ${commit.message}`).join('\n')
 
-    for (const commit of commits.all) {
-      textLog += `${commit.abbrev} - ${commit.author} - ${commit.message}\n`
-      markdownLog += `[\`${commit.abbrev}\`](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/commit/${commit.abbrev}) ${commit.author} - ${commit.message}\n`
-    }
+    core.info(`baseRef: ${baseRef}`)
+    core.info(`headRef: ${headRef}`)
+    core.info(log)
 
-    core.info(`previousTag: ${previousTag}`)
-    core.info(`latestTag: ${latestTag}`)
-    core.info(textLog)
-
-    core.setOutput('previousTag', previousTag)
-    core.setOutput('latestTag', latestTag)
-    core.setOutput('log', textLog)
-    core.setOutput('markdownLog', markdownLog)
-  } catch (error) {
-    core.setFailed(error.message)
+    core.setOutput('log', log)
+  } catch (error: any) {
+    core.setFailed(error?.message)
   }
 }
 

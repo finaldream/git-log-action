@@ -5,5 +5,10 @@ runs:
   using: 'node16'
   main: 'dist/index.js'
 outputs:
+  reverseLog:
+    description: '"true" reverses the order of the log entries (oldest top)'
+    required: false
+    default: "false"
+outputs:
   log:
     description: 'the git log'

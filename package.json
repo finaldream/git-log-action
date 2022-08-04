@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "@finaldream/git-log-action",
   "version": "1.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Git Log Action for PRs",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -25,22 +25,22 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.6.0",
-    "simple-git": "^2.46.0"
+    "@actions/core": "^1.9.0",
+    "simple-git": "^2.48.0"
   },
   "devDependencies": {
-    "@types/jest": "^27.0.2",
-    "@types/node": "^16.10.2",
-    "@typescript-eslint/parser": "^4.32.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.11.47",
+    "@typescript-eslint/parser": "^4.33.0",
     "@vercel/ncc": "^0.31.1",
     "eslint": "^7.32.0",
-    "eslint-plugin-github": "^4.3.0",
-    "eslint-plugin-jest": "^24.5.0",
+    "eslint-plugin-github": "^4.3.7",
+    "eslint-plugin-jest": "^24.7.0",
     "jest": "^26.6.3",
-    "jest-circus": "^27.2.4",
+    "jest-circus": "^27.5.1",
     "js-yaml": "^4.1.0",
     "prettier": "2.4.1",
     "ts-jest": "^26.5.6",
-    "typescript": "^4.4.3"
+    "typescript": "^4.7.4"
   }
 }

@@ -25,8 +25,8 @@ async function run(): Promise<void> {
     core.info(log)
 
     core.setOutput('log', log)
-  } catch (error: any) {
-    core.setFailed(error?.message)
+  } catch (error: unknown) {
+    core.setFailed(error instanceof Error ? error.message : 'unknown error')
   }
 }
 

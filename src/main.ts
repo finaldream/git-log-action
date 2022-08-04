@@ -5,8 +5,8 @@ async function run(): Promise<void> {
   try {
     const git: SimpleGit = simpleGit()
 
-    const baseRef = process.env.GITHUB_BASE_REF
-    const headRef = process.env.GITHUB_HEAD_REF
+    const baseRef = `origin/${process.env.GITHUB_BASE_REF}`
+    const headRef = `origin/${process.env.GITHUB_HEAD_REF}`
 
     const commits = await git.log({
       from: baseRef,

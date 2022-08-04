@@ -1,6 +1,9 @@
-name: 'Git Log Changelog Action'
-description: 'Provides latest git log between previous and latest tag'
-author: 'nils'
+name: 'Git Log PR Action'
+description: 'Provides latest git log for a Pull-Request between base- and head ref'
+author: 'olivererdmann'
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'dist/index.js'
+outputs:
+  log:
+    description: 'the git log'

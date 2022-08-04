@@ -44,29 +44,34 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const core = __importStar(__nccwpck_require__(2186));
 const simple_git_1 = __importDefault(__nccwpck_require__(1477));
+const maybeReverse = (items, reverse = true) => reverse ? items.reverse() : items;
+const gitLogAction = () => __awaiter(void 0, void 0, void 0, function* () {
+    const reverseLog = core.getInput('reverseLog').toLowerCase() === 'true';
+    const git = (0, simple_git_1.default)();
+    const baseRef = `origin/${process.env.GITHUB_BASE_REF}`;
+    const headRef = `origin/${process.env.GITHUB_HEAD_REF}`;
+    const commits = yield git.log({
+        from: baseRef,
+        to: headRef,
+        format: {
+            message: '%s'
+        },
+        splitter: '\n',
+        multiLine: false
+    });
+    const log = maybeReverse(commits.all.map(commit => `* ${commit.message}`), reverseLog).join('\n');
+    core.info(`baseRef: ${baseRef}`);
+    core.info(`headRef: ${headRef}`);
+    core.info(log);
+    core.setOutput('log', log);
+});
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const git = (0, simple_git_1.default)();
-            const baseRef = `origin/${process.env.GITHUB_BASE_REF}`;
-            const headRef = `origin/${process.env.GITHUB_HEAD_REF}`;
-            const commits = yield git.log({
-                from: baseRef,
-                to: headRef,
-                format: {
-                    message: '%s'
-                },
-                splitter: '\n',
-                multiLine: false
-            });
-            const log = commits.all.map(commit => `* ${commit.message}`).join('\n');
-            core.info(`baseRef: ${baseRef}`);
-            core.info(`headRef: ${headRef}`);
-            core.info(log);
-            core.setOutput('log', log);
+            yield gitLogAction();
         }
         catch (error) {
-            core.setFailed(error === null || error === void 0 ? void 0 : error.message);
+            core.setFailed(error instanceof Error ? error.message : 'unknown error');
         }
     });
 }

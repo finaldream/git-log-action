@@ -48,8 +48,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const git = (0, simple_git_1.default)();
-            const baseRef = process.env.GITHUB_BASE_REF;
-            const headRef = process.env.GITHUB_HEAD_REF;
+            const baseRef = `origin/${process.env.GITHUB_BASE_REF}`;
+            const headRef = `origin/${process.env.GITHUB_HEAD_REF}`;
             const commits = yield git.log({
                 from: baseRef,
                 to: headRef,

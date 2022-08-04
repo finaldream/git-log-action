@@ -1,15 +1,18 @@
-require('./sourcemap-register.js');module.exports =
-/******/ (() => { // webpackBootstrap
+require('./sourcemap-register.js');/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 3109:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -39,42 +42,31 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const core = __importStar(__webpack_require__(2186));
-const simple_git_1 = __importDefault(__webpack_require__(1477));
+const core = __importStar(__nccwpck_require__(2186));
+const simple_git_1 = __importDefault(__nccwpck_require__(1477));
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const git = simple_git_1.default();
-            const tags = yield git.tags();
-            const previousTag = tags.all.length < 2 ? undefined : tags.all[tags.all.length - 2];
-            const latestTag = tags.all.length < 1 ? undefined : tags.all[tags.all.length - 1];
+            const git = (0, simple_git_1.default)();
+            const baseRef = process.env.GITHUB_BASE_REF;
+            const headRef = process.env.GITHUB_HEAD_REF;
             const commits = yield git.log({
-                from: previousTag,
-                to: latestTag,
+                from: baseRef,
+                to: headRef,
                 format: {
-                    abbrev: '%h',
-                    author: '@%an',
                     message: '%s'
                 },
                 splitter: '\n',
                 multiLine: false
             });
-            let textLog = '';
-            let markdownLog = '';
-            for (const commit of commits.all) {
-                textLog += `${commit.abbrev} - ${commit.author} - ${commit.message}\n`;
-                markdownLog += `[\`${commit.abbrev}\`](${process.env.GITHUB_SERVER_URL}/${process.env.GITHUB_REPOSITORY}/commit/${commit.abbrev}) ${commit.author} - ${commit.message}\n`;
-            }
-            core.info(`previousTag: ${previousTag}`);
-            core.info(`latestTag: ${latestTag}`);
-            core.info(textLog);
-            core.setOutput('previousTag', previousTag);
-            core.setOutput('latestTag', latestTag);
-            core.setOutput('log', textLog);
-            core.setOutput('markdownLog', markdownLog);
+            const log = commits.all.map(commit => `* ${commit.message}`).join('\n');
+            core.info(`baseRef: ${baseRef}`);
+            core.info(`headRef: ${headRef}`);
+            core.info(log);
+            core.setOutput('log', log);
         }
         catch (error) {
-            core.setFailed(error.message);
+            core.setFailed(error === null || error === void 0 ? void 0 : error.message);
         }
     });
 }
@@ -84,20 +76,33 @@ run();
 /***/ }),
 
 /***/ 7351:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const os = __importStar(__webpack_require__(2087));
-const utils_1 = __webpack_require__(5278);
+exports.issue = exports.issueCommand = void 0;
+const os = __importStar(__nccwpck_require__(2087));
+const utils_1 = __nccwpck_require__(5278);
 /**
  * Commands
  *
@@ -170,10 +175,29 @@ function escapeProperty(s) {
 /***/ }),
 
 /***/ 2186:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -183,19 +207,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
-    return result;
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const command_1 = __webpack_require__(7351);
-const file_command_1 = __webpack_require__(717);
-const utils_1 = __webpack_require__(5278);
-const os = __importStar(__webpack_require__(2087));
-const path = __importStar(__webpack_require__(5622));
+exports.getIDToken = exports.getState = exports.saveState = exports.group = exports.endGroup = exports.startGroup = exports.info = exports.notice = exports.warning = exports.error = exports.debug = exports.isDebug = exports.setFailed = exports.setCommandEcho = exports.setOutput = exports.getBooleanInput = exports.getMultilineInput = exports.getInput = exports.addPath = exports.setSecret = exports.exportVariable = exports.ExitCode = void 0;
+const command_1 = __nccwpck_require__(7351);
+const file_command_1 = __nccwpck_require__(717);
+const utils_1 = __nccwpck_require__(5278);
+const os = __importStar(__nccwpck_require__(2087));
+const path = __importStar(__nccwpck_require__(5622));
+const oidc_utils_1 = __nccwpck_require__(8041);
 /**
  * The code to exit an action
  */
@@ -257,7 +276,9 @@ function addPath(inputPath) {
 }
 exports.addPath = addPath;
 /**
- * Gets the value of an input.  The value is also trimmed.
+ * Gets the value of an input.
+ * Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
+ * Returns an empty string if the value is not defined.
  *
  * @param     name     name of the input to get
  * @param     options  optional. See InputOptions.
@@ -268,9 +289,49 @@ function getInput(name, options) {
     if (options && options.required && !val) {
         throw new Error(`Input required and not supplied: ${name}`);
     }
+    if (options && options.trimWhitespace === false) {
+        return val;
+    }
     return val.trim();
 }
 exports.getInput = getInput;
+/**
+ * Gets the values of an multiline input.  Each value is also trimmed.
+ *
+ * @param     name     name of the input to get
+ * @param     options  optional. See InputOptions.
+ * @returns   string[]
+ *
+ */
+function getMultilineInput(name, options) {
+    const inputs = getInput(name, options)
+        .split('\n')
+        .filter(x => x !== '');
+    return inputs;
+}
+exports.getMultilineInput = getMultilineInput;
+/**
+ * Gets the input value of the boolean type in the YAML 1.2 "core schema" specification.
+ * Support boolean input list: `true | True | TRUE | false | False | FALSE` .
+ * The return value is also in boolean type.
+ * ref: https://yaml.org/spec/1.2/spec.html#id2804923
+ *
+ * @param     name     name of the input to get
+ * @param     options  optional. See InputOptions.
+ * @returns   boolean
+ */
+function getBooleanInput(name, options) {
+    const trueValue = ['true', 'True', 'TRUE'];
+    const falseValue = ['false', 'False', 'FALSE'];
+    const val = getInput(name, options);
+    if (trueValue.includes(val))
+        return true;
+    if (falseValue.includes(val))
+        return false;
+    throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}\n` +
+        `Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
+}
+exports.getBooleanInput = getBooleanInput;
 /**
  * Sets the value of an output.
  *
@@ -279,6 +340,7 @@ exports.getInput = getInput;
  */
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function setOutput(name, value) {
+    process.stdout.write(os.EOL);
     command_1.issueCommand('set-output', { name }, value);
 }
 exports.setOutput = setOutput;
@@ -325,19 +387,30 @@ exports.debug = debug;
 /**
  * Adds an error issue
  * @param message error issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
  */
-function error(message) {
-    command_1.issue('error', message instanceof Error ? message.toString() : message);
+function error(message, properties = {}) {
+    command_1.issueCommand('error', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.error = error;
 /**
- * Adds an warning issue
+ * Adds a warning issue
  * @param message warning issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
  */
-function warning(message) {
-    command_1.issue('warning', message instanceof Error ? message.toString() : message);
+function warning(message, properties = {}) {
+    command_1.issueCommand('warning', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
 }
 exports.warning = warning;
+/**
+ * Adds a notice issue
+ * @param message notice issue message. Errors will be converted to string via toString()
+ * @param properties optional properties to add to the annotation.
+ */
+function notice(message, properties = {}) {
+    command_1.issueCommand('notice', utils_1.toCommandProperties(properties), message instanceof Error ? message.toString() : message);
+}
+exports.notice = notice;
 /**
  * Writes info to log with console.log.
  * @param message info message
@@ -410,29 +483,65 @@ function getState(name) {
     return process.env[`STATE_${name}`] || '';
 }
 exports.getState = getState;
+function getIDToken(aud) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield oidc_utils_1.OidcClient.getIDToken(aud);
+    });
+}
+exports.getIDToken = getIDToken;
+/**
+ * Summary exports
+ */
+var summary_1 = __nccwpck_require__(1327);
+Object.defineProperty(exports, "summary", ({ enumerable: true, get: function () { return summary_1.summary; } }));
+/**
+ * @deprecated use core.summary
+ */
+var summary_2 = __nccwpck_require__(1327);
+Object.defineProperty(exports, "markdownSummary", ({ enumerable: true, get: function () { return summary_2.markdownSummary; } }));
+/**
+ * Path exports
+ */
+var path_utils_1 = __nccwpck_require__(2981);
+Object.defineProperty(exports, "toPosixPath", ({ enumerable: true, get: function () { return path_utils_1.toPosixPath; } }));
+Object.defineProperty(exports, "toWin32Path", ({ enumerable: true, get: function () { return path_utils_1.toWin32Path; } }));
+Object.defineProperty(exports, "toPlatformPath", ({ enumerable: true, get: function () { return path_utils_1.toPlatformPath; } }));
 //# sourceMappingURL=core.js.map
 
 /***/ }),
 
 /***/ 717:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
 // For internal use, subject to change.
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null) for (var k in mod) if (Object.hasOwnProperty.call(mod, k)) result[k] = mod[k];
-    result["default"] = mod;
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.issueCommand = void 0;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const fs = __importStar(__webpack_require__(5747));
-const os = __importStar(__webpack_require__(2087));
-const utils_1 = __webpack_require__(5278);
+const fs = __importStar(__nccwpck_require__(5747));
+const os = __importStar(__nccwpck_require__(2087));
+const utils_1 = __nccwpck_require__(5278);
 function issueCommand(command, message) {
     const filePath = process.env[`GITHUB_${command}`];
     if (!filePath) {
@@ -450,6 +559,445 @@ exports.issueCommand = issueCommand;
 
 /***/ }),
 
+/***/ 8041:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.OidcClient = void 0;
+const http_client_1 = __nccwpck_require__(6255);
+const auth_1 = __nccwpck_require__(5526);
+const core_1 = __nccwpck_require__(2186);
+class OidcClient {
+    static createHttpClient(allowRetry = true, maxRetry = 10) {
+        const requestOptions = {
+            allowRetries: allowRetry,
+            maxRetries: maxRetry
+        };
+        return new http_client_1.HttpClient('actions/oidc-client', [new auth_1.BearerCredentialHandler(OidcClient.getRequestToken())], requestOptions);
+    }
+    static getRequestToken() {
+        const token = process.env['ACTIONS_ID_TOKEN_REQUEST_TOKEN'];
+        if (!token) {
+            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_TOKEN env variable');
+        }
+        return token;
+    }
+    static getIDTokenUrl() {
+        const runtimeUrl = process.env['ACTIONS_ID_TOKEN_REQUEST_URL'];
+        if (!runtimeUrl) {
+            throw new Error('Unable to get ACTIONS_ID_TOKEN_REQUEST_URL env variable');
+        }
+        return runtimeUrl;
+    }
+    static getCall(id_token_url) {
+        var _a;
+        return __awaiter(this, void 0, void 0, function* () {
+            const httpclient = OidcClient.createHttpClient();
+            const res = yield httpclient
+                .getJson(id_token_url)
+                .catch(error => {
+                throw new Error(`Failed to get ID Token. \n 
+        Error Code : ${error.statusCode}\n 
+        Error Message: ${error.result.message}`);
+            });
+            const id_token = (_a = res.result) === null || _a === void 0 ? void 0 : _a.value;
+            if (!id_token) {
+                throw new Error('Response json body do not have ID Token field');
+            }
+            return id_token;
+        });
+    }
+    static getIDToken(audience) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                // New ID Token is requested from action service
+                let id_token_url = OidcClient.getIDTokenUrl();
+                if (audience) {
+                    const encodedAudience = encodeURIComponent(audience);
+                    id_token_url = `${id_token_url}&audience=${encodedAudience}`;
+                }
+                core_1.debug(`ID token url is ${id_token_url}`);
+                const id_token = yield OidcClient.getCall(id_token_url);
+                core_1.setSecret(id_token);
+                return id_token;
+            }
+            catch (error) {
+                throw new Error(`Error message: ${error.message}`);
+            }
+        });
+    }
+}
+exports.OidcClient = OidcClient;
+//# sourceMappingURL=oidc-utils.js.map
+
+/***/ }),
+
+/***/ 2981:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toPlatformPath = exports.toWin32Path = exports.toPosixPath = void 0;
+const path = __importStar(__nccwpck_require__(5622));
+/**
+ * toPosixPath converts the given path to the posix form. On Windows, \\ will be
+ * replaced with /.
+ *
+ * @param pth. Path to transform.
+ * @return string Posix path.
+ */
+function toPosixPath(pth) {
+    return pth.replace(/[\\]/g, '/');
+}
+exports.toPosixPath = toPosixPath;
+/**
+ * toWin32Path converts the given path to the win32 form. On Linux, / will be
+ * replaced with \\.
+ *
+ * @param pth. Path to transform.
+ * @return string Win32 path.
+ */
+function toWin32Path(pth) {
+    return pth.replace(/[/]/g, '\\');
+}
+exports.toWin32Path = toWin32Path;
+/**
+ * toPlatformPath converts the given path to a platform-specific path. It does
+ * this by replacing instances of / and \ with the platform-specific path
+ * separator.
+ *
+ * @param pth The path to platformize.
+ * @return string The platform-specific path.
+ */
+function toPlatformPath(pth) {
+    return pth.replace(/[/\\]/g, path.sep);
+}
+exports.toPlatformPath = toPlatformPath;
+//# sourceMappingURL=path-utils.js.map
+
+/***/ }),
+
+/***/ 1327:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.summary = exports.markdownSummary = exports.SUMMARY_DOCS_URL = exports.SUMMARY_ENV_VAR = void 0;
+const os_1 = __nccwpck_require__(2087);
+const fs_1 = __nccwpck_require__(5747);
+const { access, appendFile, writeFile } = fs_1.promises;
+exports.SUMMARY_ENV_VAR = 'GITHUB_STEP_SUMMARY';
+exports.SUMMARY_DOCS_URL = 'https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary';
+class Summary {
+    constructor() {
+        this._buffer = '';
+    }
+    /**
+     * Finds the summary file path from the environment, rejects if env var is not found or file does not exist
+     * Also checks r/w permissions.
+     *
+     * @returns step summary file path
+     */
+    filePath() {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this._filePath) {
+                return this._filePath;
+            }
+            const pathFromEnv = process.env[exports.SUMMARY_ENV_VAR];
+            if (!pathFromEnv) {
+                throw new Error(`Unable to find environment variable for $${exports.SUMMARY_ENV_VAR}. Check if your runtime environment supports job summaries.`);
+            }
+            try {
+                yield access(pathFromEnv, fs_1.constants.R_OK | fs_1.constants.W_OK);
+            }
+            catch (_a) {
+                throw new Error(`Unable to access summary file: '${pathFromEnv}'. Check if the file has correct read/write permissions.`);
+            }
+            this._filePath = pathFromEnv;
+            return this._filePath;
+        });
+    }
+    /**
+     * Wraps content in an HTML tag, adding any HTML attributes
+     *
+     * @param {string} tag HTML tag to wrap
+     * @param {string | null} content content within the tag
+     * @param {[attribute: string]: string} attrs key-value list of HTML attributes to add
+     *
+     * @returns {string} content wrapped in HTML element
+     */
+    wrap(tag, content, attrs = {}) {
+        const htmlAttrs = Object.entries(attrs)
+            .map(([key, value]) => ` ${key}="${value}"`)
+            .join('');
+        if (!content) {
+            return `<${tag}${htmlAttrs}>`;
+        }
+        return `<${tag}${htmlAttrs}>${content}</${tag}>`;
+    }
+    /**
+     * Writes text in the buffer to the summary buffer file and empties buffer. Will append by default.
+     *
+     * @param {SummaryWriteOptions} [options] (optional) options for write operation
+     *
+     * @returns {Promise<Summary>} summary instance
+     */
+    write(options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const overwrite = !!(options === null || options === void 0 ? void 0 : options.overwrite);
+            const filePath = yield this.filePath();
+            const writeFunc = overwrite ? writeFile : appendFile;
+            yield writeFunc(filePath, this._buffer, { encoding: 'utf8' });
+            return this.emptyBuffer();
+        });
+    }
+    /**
+     * Clears the summary buffer and wipes the summary file
+     *
+     * @returns {Summary} summary instance
+     */
+    clear() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.emptyBuffer().write({ overwrite: true });
+        });
+    }
+    /**
+     * Returns the current summary buffer as a string
+     *
+     * @returns {string} string of summary buffer
+     */
+    stringify() {
+        return this._buffer;
+    }
+    /**
+     * If the summary buffer is empty
+     *
+     * @returns {boolen} true if the buffer is empty
+     */
+    isEmptyBuffer() {
+        return this._buffer.length === 0;
+    }
+    /**
+     * Resets the summary buffer without writing to summary file
+     *
+     * @returns {Summary} summary instance
+     */
+    emptyBuffer() {
+        this._buffer = '';
+        return this;
+    }
+    /**
+     * Adds raw text to the summary buffer
+     *
+     * @param {string} text content to add
+     * @param {boolean} [addEOL=false] (optional) append an EOL to the raw text (default: false)
+     *
+     * @returns {Summary} summary instance
+     */
+    addRaw(text, addEOL = false) {
+        this._buffer += text;
+        return addEOL ? this.addEOL() : this;
+    }
+    /**
+     * Adds the operating system-specific end-of-line marker to the buffer
+     *
+     * @returns {Summary} summary instance
+     */
+    addEOL() {
+        return this.addRaw(os_1.EOL);
+    }
+    /**
+     * Adds an HTML codeblock to the summary buffer
+     *
+     * @param {string} code content to render within fenced code block
+     * @param {string} lang (optional) language to syntax highlight code
+     *
+     * @returns {Summary} summary instance
+     */
+    addCodeBlock(code, lang) {
+        const attrs = Object.assign({}, (lang && { lang }));
+        const element = this.wrap('pre', this.wrap('code', code), attrs);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML list to the summary buffer
+     *
+     * @param {string[]} items list of items to render
+     * @param {boolean} [ordered=false] (optional) if the rendered list should be ordered or not (default: false)
+     *
+     * @returns {Summary} summary instance
+     */
+    addList(items, ordered = false) {
+        const tag = ordered ? 'ol' : 'ul';
+        const listItems = items.map(item => this.wrap('li', item)).join('');
+        const element = this.wrap(tag, listItems);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML table to the summary buffer
+     *
+     * @param {SummaryTableCell[]} rows table rows
+     *
+     * @returns {Summary} summary instance
+     */
+    addTable(rows) {
+        const tableBody = rows
+            .map(row => {
+            const cells = row
+                .map(cell => {
+                if (typeof cell === 'string') {
+                    return this.wrap('td', cell);
+                }
+                const { header, data, colspan, rowspan } = cell;
+                const tag = header ? 'th' : 'td';
+                const attrs = Object.assign(Object.assign({}, (colspan && { colspan })), (rowspan && { rowspan }));
+                return this.wrap(tag, data, attrs);
+            })
+                .join('');
+            return this.wrap('tr', cells);
+        })
+            .join('');
+        const element = this.wrap('table', tableBody);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds a collapsable HTML details element to the summary buffer
+     *
+     * @param {string} label text for the closed state
+     * @param {string} content collapsable content
+     *
+     * @returns {Summary} summary instance
+     */
+    addDetails(label, content) {
+        const element = this.wrap('details', this.wrap('summary', label) + content);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML image tag to the summary buffer
+     *
+     * @param {string} src path to the image you to embed
+     * @param {string} alt text description of the image
+     * @param {SummaryImageOptions} options (optional) addition image attributes
+     *
+     * @returns {Summary} summary instance
+     */
+    addImage(src, alt, options) {
+        const { width, height } = options || {};
+        const attrs = Object.assign(Object.assign({}, (width && { width })), (height && { height }));
+        const element = this.wrap('img', null, Object.assign({ src, alt }, attrs));
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML section heading element
+     *
+     * @param {string} text heading text
+     * @param {number | string} [level=1] (optional) the heading level, default: 1
+     *
+     * @returns {Summary} summary instance
+     */
+    addHeading(text, level) {
+        const tag = `h${level}`;
+        const allowedTag = ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'].includes(tag)
+            ? tag
+            : 'h1';
+        const element = this.wrap(allowedTag, text);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML thematic break (<hr>) to the summary buffer
+     *
+     * @returns {Summary} summary instance
+     */
+    addSeparator() {
+        const element = this.wrap('hr', null);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML line break (<br>) to the summary buffer
+     *
+     * @returns {Summary} summary instance
+     */
+    addBreak() {
+        const element = this.wrap('br', null);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML blockquote to the summary buffer
+     *
+     * @param {string} text quote text
+     * @param {string} cite (optional) citation url
+     *
+     * @returns {Summary} summary instance
+     */
+    addQuote(text, cite) {
+        const attrs = Object.assign({}, (cite && { cite }));
+        const element = this.wrap('blockquote', text, attrs);
+        return this.addRaw(element).addEOL();
+    }
+    /**
+     * Adds an HTML anchor tag to the summary buffer
+     *
+     * @param {string} text link text/content
+     * @param {string} href hyperlink
+     *
+     * @returns {Summary} summary instance
+     */
+    addLink(text, href) {
+        const element = this.wrap('a', text, { href });
+        return this.addRaw(element).addEOL();
+    }
+}
+const _summary = new Summary();
+/**
+ * @deprecated use `core.summary`
+ */
+exports.markdownSummary = _summary;
+exports.summary = _summary;
+//# sourceMappingURL=summary.js.map
+
+/***/ }),
+
 /***/ 5278:
 /***/ ((__unused_webpack_module, exports) => {
 
@@ -458,6 +1006,7 @@ exports.issueCommand = issueCommand;
 // We use any as a valid input type
 /* eslint-disable @typescript-eslint/no-explicit-any */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.toCommandProperties = exports.toCommandValue = void 0;
 /**
  * Sanitizes an input into a string so it can be passed into issueCommand safely
  * @param input input to sanitize into a string
@@ -472,12 +1021,800 @@ function toCommandValue(input) {
     return JSON.stringify(input);
 }
 exports.toCommandValue = toCommandValue;
+/**
+ *
+ * @param annotationProperties
+ * @returns The command properties to send with the actual annotation command
+ * See IssueCommandProperties: https://github.com/actions/runner/blob/main/src/Runner.Worker/ActionCommandManager.cs#L646
+ */
+function toCommandProperties(annotationProperties) {
+    if (!Object.keys(annotationProperties).length) {
+        return {};
+    }
+    return {
+        title: annotationProperties.title,
+        file: annotationProperties.file,
+        line: annotationProperties.startLine,
+        endLine: annotationProperties.endLine,
+        col: annotationProperties.startColumn,
+        endColumn: annotationProperties.endColumn
+    };
+}
+exports.toCommandProperties = toCommandProperties;
 //# sourceMappingURL=utils.js.map
 
 /***/ }),
 
+/***/ 5526:
+/***/ (function(__unused_webpack_module, exports) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PersonalAccessTokenCredentialHandler = exports.BearerCredentialHandler = exports.BasicCredentialHandler = void 0;
+class BasicCredentialHandler {
+    constructor(username, password) {
+        this.username = username;
+        this.password = password;
+    }
+    prepareRequest(options) {
+        if (!options.headers) {
+            throw Error('The request has no headers');
+        }
+        options.headers['Authorization'] = `Basic ${Buffer.from(`${this.username}:${this.password}`).toString('base64')}`;
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication() {
+        return false;
+    }
+    handleAuthentication() {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error('not implemented');
+        });
+    }
+}
+exports.BasicCredentialHandler = BasicCredentialHandler;
+class BearerCredentialHandler {
+    constructor(token) {
+        this.token = token;
+    }
+    // currently implements pre-authorization
+    // TODO: support preAuth = false where it hooks on 401
+    prepareRequest(options) {
+        if (!options.headers) {
+            throw Error('The request has no headers');
+        }
+        options.headers['Authorization'] = `Bearer ${this.token}`;
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication() {
+        return false;
+    }
+    handleAuthentication() {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error('not implemented');
+        });
+    }
+}
+exports.BearerCredentialHandler = BearerCredentialHandler;
+class PersonalAccessTokenCredentialHandler {
+    constructor(token) {
+        this.token = token;
+    }
+    // currently implements pre-authorization
+    // TODO: support preAuth = false where it hooks on 401
+    prepareRequest(options) {
+        if (!options.headers) {
+            throw Error('The request has no headers');
+        }
+        options.headers['Authorization'] = `Basic ${Buffer.from(`PAT:${this.token}`).toString('base64')}`;
+    }
+    // This handler cannot handle 401
+    canHandleAuthentication() {
+        return false;
+    }
+    handleAuthentication() {
+        return __awaiter(this, void 0, void 0, function* () {
+            throw new Error('not implemented');
+        });
+    }
+}
+exports.PersonalAccessTokenCredentialHandler = PersonalAccessTokenCredentialHandler;
+//# sourceMappingURL=auth.js.map
+
+/***/ }),
+
+/***/ 6255:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.HttpClient = exports.isHttps = exports.HttpClientResponse = exports.HttpClientError = exports.getProxyUrl = exports.MediaTypes = exports.Headers = exports.HttpCodes = void 0;
+const http = __importStar(__nccwpck_require__(8605));
+const https = __importStar(__nccwpck_require__(7211));
+const pm = __importStar(__nccwpck_require__(9835));
+const tunnel = __importStar(__nccwpck_require__(4294));
+var HttpCodes;
+(function (HttpCodes) {
+    HttpCodes[HttpCodes["OK"] = 200] = "OK";
+    HttpCodes[HttpCodes["MultipleChoices"] = 300] = "MultipleChoices";
+    HttpCodes[HttpCodes["MovedPermanently"] = 301] = "MovedPermanently";
+    HttpCodes[HttpCodes["ResourceMoved"] = 302] = "ResourceMoved";
+    HttpCodes[HttpCodes["SeeOther"] = 303] = "SeeOther";
+    HttpCodes[HttpCodes["NotModified"] = 304] = "NotModified";
+    HttpCodes[HttpCodes["UseProxy"] = 305] = "UseProxy";
+    HttpCodes[HttpCodes["SwitchProxy"] = 306] = "SwitchProxy";
+    HttpCodes[HttpCodes["TemporaryRedirect"] = 307] = "TemporaryRedirect";
+    HttpCodes[HttpCodes["PermanentRedirect"] = 308] = "PermanentRedirect";
+    HttpCodes[HttpCodes["BadRequest"] = 400] = "BadRequest";
+    HttpCodes[HttpCodes["Unauthorized"] = 401] = "Unauthorized";
+    HttpCodes[HttpCodes["PaymentRequired"] = 402] = "PaymentRequired";
+    HttpCodes[HttpCodes["Forbidden"] = 403] = "Forbidden";
+    HttpCodes[HttpCodes["NotFound"] = 404] = "NotFound";
+    HttpCodes[HttpCodes["MethodNotAllowed"] = 405] = "MethodNotAllowed";
+    HttpCodes[HttpCodes["NotAcceptable"] = 406] = "NotAcceptable";
+    HttpCodes[HttpCodes["ProxyAuthenticationRequired"] = 407] = "ProxyAuthenticationRequired";
+    HttpCodes[HttpCodes["RequestTimeout"] = 408] = "RequestTimeout";
+    HttpCodes[HttpCodes["Conflict"] = 409] = "Conflict";
+    HttpCodes[HttpCodes["Gone"] = 410] = "Gone";
+    HttpCodes[HttpCodes["TooManyRequests"] = 429] = "TooManyRequests";
+    HttpCodes[HttpCodes["InternalServerError"] = 500] = "InternalServerError";
+    HttpCodes[HttpCodes["NotImplemented"] = 501] = "NotImplemented";
+    HttpCodes[HttpCodes["BadGateway"] = 502] = "BadGateway";
+    HttpCodes[HttpCodes["ServiceUnavailable"] = 503] = "ServiceUnavailable";
+    HttpCodes[HttpCodes["GatewayTimeout"] = 504] = "GatewayTimeout";
+})(HttpCodes = exports.HttpCodes || (exports.HttpCodes = {}));
+var Headers;
+(function (Headers) {
+    Headers["Accept"] = "accept";
+    Headers["ContentType"] = "content-type";
+})(Headers = exports.Headers || (exports.Headers = {}));
+var MediaTypes;
+(function (MediaTypes) {
+    MediaTypes["ApplicationJson"] = "application/json";
+})(MediaTypes = exports.MediaTypes || (exports.MediaTypes = {}));
+/**
+ * Returns the proxy URL, depending upon the supplied url and proxy environment variables.
+ * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
+ */
+function getProxyUrl(serverUrl) {
+    const proxyUrl = pm.getProxyUrl(new URL(serverUrl));
+    return proxyUrl ? proxyUrl.href : '';
+}
+exports.getProxyUrl = getProxyUrl;
+const HttpRedirectCodes = [
+    HttpCodes.MovedPermanently,
+    HttpCodes.ResourceMoved,
+    HttpCodes.SeeOther,
+    HttpCodes.TemporaryRedirect,
+    HttpCodes.PermanentRedirect
+];
+const HttpResponseRetryCodes = [
+    HttpCodes.BadGateway,
+    HttpCodes.ServiceUnavailable,
+    HttpCodes.GatewayTimeout
+];
+const RetryableHttpVerbs = ['OPTIONS', 'GET', 'DELETE', 'HEAD'];
+const ExponentialBackoffCeiling = 10;
+const ExponentialBackoffTimeSlice = 5;
+class HttpClientError extends Error {
+    constructor(message, statusCode) {
+        super(message);
+        this.name = 'HttpClientError';
+        this.statusCode = statusCode;
+        Object.setPrototypeOf(this, HttpClientError.prototype);
+    }
+}
+exports.HttpClientError = HttpClientError;
+class HttpClientResponse {
+    constructor(message) {
+        this.message = message;
+    }
+    readBody() {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve) => __awaiter(this, void 0, void 0, function* () {
+                let output = Buffer.alloc(0);
+                this.message.on('data', (chunk) => {
+                    output = Buffer.concat([output, chunk]);
+                });
+                this.message.on('end', () => {
+                    resolve(output.toString());
+                });
+            }));
+        });
+    }
+}
+exports.HttpClientResponse = HttpClientResponse;
+function isHttps(requestUrl) {
+    const parsedUrl = new URL(requestUrl);
+    return parsedUrl.protocol === 'https:';
+}
+exports.isHttps = isHttps;
+class HttpClient {
+    constructor(userAgent, handlers, requestOptions) {
+        this._ignoreSslError = false;
+        this._allowRedirects = true;
+        this._allowRedirectDowngrade = false;
+        this._maxRedirects = 50;
+        this._allowRetries = false;
+        this._maxRetries = 1;
+        this._keepAlive = false;
+        this._disposed = false;
+        this.userAgent = userAgent;
+        this.handlers = handlers || [];
+        this.requestOptions = requestOptions;
+        if (requestOptions) {
+            if (requestOptions.ignoreSslError != null) {
+                this._ignoreSslError = requestOptions.ignoreSslError;
+            }
+            this._socketTimeout = requestOptions.socketTimeout;
+            if (requestOptions.allowRedirects != null) {
+                this._allowRedirects = requestOptions.allowRedirects;
+            }
+            if (requestOptions.allowRedirectDowngrade != null) {
+                this._allowRedirectDowngrade = requestOptions.allowRedirectDowngrade;
+            }
+            if (requestOptions.maxRedirects != null) {
+                this._maxRedirects = Math.max(requestOptions.maxRedirects, 0);
+            }
+            if (requestOptions.keepAlive != null) {
+                this._keepAlive = requestOptions.keepAlive;
+            }
+            if (requestOptions.allowRetries != null) {
+                this._allowRetries = requestOptions.allowRetries;
+            }
+            if (requestOptions.maxRetries != null) {
+                this._maxRetries = requestOptions.maxRetries;
+            }
+        }
+    }
+    options(requestUrl, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('OPTIONS', requestUrl, null, additionalHeaders || {});
+        });
+    }
+    get(requestUrl, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('GET', requestUrl, null, additionalHeaders || {});
+        });
+    }
+    del(requestUrl, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('DELETE', requestUrl, null, additionalHeaders || {});
+        });
+    }
+    post(requestUrl, data, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('POST', requestUrl, data, additionalHeaders || {});
+        });
+    }
+    patch(requestUrl, data, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('PATCH', requestUrl, data, additionalHeaders || {});
+        });
+    }
+    put(requestUrl, data, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('PUT', requestUrl, data, additionalHeaders || {});
+        });
+    }
+    head(requestUrl, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request('HEAD', requestUrl, null, additionalHeaders || {});
+        });
+    }
+    sendStream(verb, requestUrl, stream, additionalHeaders) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return this.request(verb, requestUrl, stream, additionalHeaders);
+        });
+    }
+    /**
+     * Gets a typed object from an endpoint
+     * Be aware that not found returns a null.  Other errors (4xx, 5xx) reject the promise
+     */
+    getJson(requestUrl, additionalHeaders = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+            const res = yield this.get(requestUrl, additionalHeaders);
+            return this._processResponse(res, this.requestOptions);
+        });
+    }
+    postJson(requestUrl, obj, additionalHeaders = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = JSON.stringify(obj, null, 2);
+            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            const res = yield this.post(requestUrl, data, additionalHeaders);
+            return this._processResponse(res, this.requestOptions);
+        });
+    }
+    putJson(requestUrl, obj, additionalHeaders = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = JSON.stringify(obj, null, 2);
+            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            const res = yield this.put(requestUrl, data, additionalHeaders);
+            return this._processResponse(res, this.requestOptions);
+        });
+    }
+    patchJson(requestUrl, obj, additionalHeaders = {}) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const data = JSON.stringify(obj, null, 2);
+            additionalHeaders[Headers.Accept] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.Accept, MediaTypes.ApplicationJson);
+            additionalHeaders[Headers.ContentType] = this._getExistingOrDefaultHeader(additionalHeaders, Headers.ContentType, MediaTypes.ApplicationJson);
+            const res = yield this.patch(requestUrl, data, additionalHeaders);
+            return this._processResponse(res, this.requestOptions);
+        });
+    }
+    /**
+     * Makes a raw http request.
+     * All other methods such as get, post, patch, and request ultimately call this.
+     * Prefer get, del, post and patch
+     */
+    request(verb, requestUrl, data, headers) {
+        return __awaiter(this, void 0, void 0, function* () {
+            if (this._disposed) {
+                throw new Error('Client has already been disposed.');
+            }
+            const parsedUrl = new URL(requestUrl);
+            let info = this._prepareRequest(verb, parsedUrl, headers);
+            // Only perform retries on reads since writes may not be idempotent.
+            const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb)
+                ? this._maxRetries + 1
+                : 1;
+            let numTries = 0;
+            let response;
+            do {
+                response = yield this.requestRaw(info, data);
+                // Check if it's an authentication challenge
+                if (response &&
+                    response.message &&
+                    response.message.statusCode === HttpCodes.Unauthorized) {
+                    let authenticationHandler;
+                    for (const handler of this.handlers) {
+                        if (handler.canHandleAuthentication(response)) {
+                            authenticationHandler = handler;
+                            break;
+                        }
+                    }
+                    if (authenticationHandler) {
+                        return authenticationHandler.handleAuthentication(this, info, data);
+                    }
+                    else {
+                        // We have received an unauthorized response but have no handlers to handle it.
+                        // Let the response return to the caller.
+                        return response;
+                    }
+                }
+                let redirectsRemaining = this._maxRedirects;
+                while (response.message.statusCode &&
+                    HttpRedirectCodes.includes(response.message.statusCode) &&
+                    this._allowRedirects &&
+                    redirectsRemaining > 0) {
+                    const redirectUrl = response.message.headers['location'];
+                    if (!redirectUrl) {
+                        // if there's no location to redirect to, we won't
+                        break;
+                    }
+                    const parsedRedirectUrl = new URL(redirectUrl);
+                    if (parsedUrl.protocol === 'https:' &&
+                        parsedUrl.protocol !== parsedRedirectUrl.protocol &&
+                        !this._allowRedirectDowngrade) {
+                        throw new Error('Redirect from HTTPS to HTTP protocol. This downgrade is not allowed for security reasons. If you want to allow this behavior, set the allowRedirectDowngrade option to true.');
+                    }
+                    // we need to finish reading the response before reassigning response
+                    // which will leak the open socket.
+                    yield response.readBody();
+                    // strip authorization header if redirected to a different hostname
+                    if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
+                        for (const header in headers) {
+                            // header names are case insensitive
+                            if (header.toLowerCase() === 'authorization') {
+                                delete headers[header];
+                            }
+                        }
+                    }
+                    // let's make the request with the new redirectUrl
+                    info = this._prepareRequest(verb, parsedRedirectUrl, headers);
+                    response = yield this.requestRaw(info, data);
+                    redirectsRemaining--;
+                }
+                if (!response.message.statusCode ||
+                    !HttpResponseRetryCodes.includes(response.message.statusCode)) {
+                    // If not a retry code, return immediately instead of retrying
+                    return response;
+                }
+                numTries += 1;
+                if (numTries < maxTries) {
+                    yield response.readBody();
+                    yield this._performExponentialBackoff(numTries);
+                }
+            } while (numTries < maxTries);
+            return response;
+        });
+    }
+    /**
+     * Needs to be called if keepAlive is set to true in request options.
+     */
+    dispose() {
+        if (this._agent) {
+            this._agent.destroy();
+        }
+        this._disposed = true;
+    }
+    /**
+     * Raw request.
+     * @param info
+     * @param data
+     */
+    requestRaw(info, data) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => {
+                function callbackForResult(err, res) {
+                    if (err) {
+                        reject(err);
+                    }
+                    else if (!res) {
+                        // If `err` is not passed, then `res` must be passed.
+                        reject(new Error('Unknown error'));
+                    }
+                    else {
+                        resolve(res);
+                    }
+                }
+                this.requestRawWithCallback(info, data, callbackForResult);
+            });
+        });
+    }
+    /**
+     * Raw request with callback.
+     * @param info
+     * @param data
+     * @param onResult
+     */
+    requestRawWithCallback(info, data, onResult) {
+        if (typeof data === 'string') {
+            if (!info.options.headers) {
+                info.options.headers = {};
+            }
+            info.options.headers['Content-Length'] = Buffer.byteLength(data, 'utf8');
+        }
+        let callbackCalled = false;
+        function handleResult(err, res) {
+            if (!callbackCalled) {
+                callbackCalled = true;
+                onResult(err, res);
+            }
+        }
+        const req = info.httpModule.request(info.options, (msg) => {
+            const res = new HttpClientResponse(msg);
+            handleResult(undefined, res);
+        });
+        let socket;
+        req.on('socket', sock => {
+            socket = sock;
+        });
+        // If we ever get disconnected, we want the socket to timeout eventually
+        req.setTimeout(this._socketTimeout || 3 * 60000, () => {
+            if (socket) {
+                socket.end();
+            }
+            handleResult(new Error(`Request timeout: ${info.options.path}`));
+        });
+        req.on('error', function (err) {
+            // err has statusCode property
+            // res should have headers
+            handleResult(err);
+        });
+        if (data && typeof data === 'string') {
+            req.write(data, 'utf8');
+        }
+        if (data && typeof data !== 'string') {
+            data.on('close', function () {
+                req.end();
+            });
+            data.pipe(req);
+        }
+        else {
+            req.end();
+        }
+    }
+    /**
+     * Gets an http agent. This function is useful when you need an http agent that handles
+     * routing through a proxy server - depending upon the url and proxy environment variables.
+     * @param serverUrl  The server URL where the request will be sent. For example, https://api.github.com
+     */
+    getAgent(serverUrl) {
+        const parsedUrl = new URL(serverUrl);
+        return this._getAgent(parsedUrl);
+    }
+    _prepareRequest(method, requestUrl, headers) {
+        const info = {};
+        info.parsedUrl = requestUrl;
+        const usingSsl = info.parsedUrl.protocol === 'https:';
+        info.httpModule = usingSsl ? https : http;
+        const defaultPort = usingSsl ? 443 : 80;
+        info.options = {};
+        info.options.host = info.parsedUrl.hostname;
+        info.options.port = info.parsedUrl.port
+            ? parseInt(info.parsedUrl.port)
+            : defaultPort;
+        info.options.path =
+            (info.parsedUrl.pathname || '') + (info.parsedUrl.search || '');
+        info.options.method = method;
+        info.options.headers = this._mergeHeaders(headers);
+        if (this.userAgent != null) {
+            info.options.headers['user-agent'] = this.userAgent;
+        }
+        info.options.agent = this._getAgent(info.parsedUrl);
+        // gives handlers an opportunity to participate
+        if (this.handlers) {
+            for (const handler of this.handlers) {
+                handler.prepareRequest(info.options);
+            }
+        }
+        return info;
+    }
+    _mergeHeaders(headers) {
+        if (this.requestOptions && this.requestOptions.headers) {
+            return Object.assign({}, lowercaseKeys(this.requestOptions.headers), lowercaseKeys(headers || {}));
+        }
+        return lowercaseKeys(headers || {});
+    }
+    _getExistingOrDefaultHeader(additionalHeaders, header, _default) {
+        let clientHeader;
+        if (this.requestOptions && this.requestOptions.headers) {
+            clientHeader = lowercaseKeys(this.requestOptions.headers)[header];
+        }
+        return additionalHeaders[header] || clientHeader || _default;
+    }
+    _getAgent(parsedUrl) {
+        let agent;
+        const proxyUrl = pm.getProxyUrl(parsedUrl);
+        const useProxy = proxyUrl && proxyUrl.hostname;
+        if (this._keepAlive && useProxy) {
+            agent = this._proxyAgent;
+        }
+        if (this._keepAlive && !useProxy) {
+            agent = this._agent;
+        }
+        // if agent is already assigned use that agent.
+        if (agent) {
+            return agent;
+        }
+        const usingSsl = parsedUrl.protocol === 'https:';
+        let maxSockets = 100;
+        if (this.requestOptions) {
+            maxSockets = this.requestOptions.maxSockets || http.globalAgent.maxSockets;
+        }
+        // This is `useProxy` again, but we need to check `proxyURl` directly for TypeScripts's flow analysis.
+        if (proxyUrl && proxyUrl.hostname) {
+            const agentOptions = {
+                maxSockets,
+                keepAlive: this._keepAlive,
+                proxy: Object.assign(Object.assign({}, ((proxyUrl.username || proxyUrl.password) && {
+                    proxyAuth: `${proxyUrl.username}:${proxyUrl.password}`
+                })), { host: proxyUrl.hostname, port: proxyUrl.port })
+            };
+            let tunnelAgent;
+            const overHttps = proxyUrl.protocol === 'https:';
+            if (usingSsl) {
+                tunnelAgent = overHttps ? tunnel.httpsOverHttps : tunnel.httpsOverHttp;
+            }
+            else {
+                tunnelAgent = overHttps ? tunnel.httpOverHttps : tunnel.httpOverHttp;
+            }
+            agent = tunnelAgent(agentOptions);
+            this._proxyAgent = agent;
+        }
+        // if reusing agent across request and tunneling agent isn't assigned create a new agent
+        if (this._keepAlive && !agent) {
+            const options = { keepAlive: this._keepAlive, maxSockets };
+            agent = usingSsl ? new https.Agent(options) : new http.Agent(options);
+            this._agent = agent;
+        }
+        // if not using private agent and tunnel agent isn't setup then use global agent
+        if (!agent) {
+            agent = usingSsl ? https.globalAgent : http.globalAgent;
+        }
+        if (usingSsl && this._ignoreSslError) {
+            // we don't want to set NODE_TLS_REJECT_UNAUTHORIZED=0 since that will affect request for entire process
+            // http.RequestOptions doesn't expose a way to modify RequestOptions.agent.options
+            // we have to cast it to any and change it directly
+            agent.options = Object.assign(agent.options || {}, {
+                rejectUnauthorized: false
+            });
+        }
+        return agent;
+    }
+    _performExponentialBackoff(retryNumber) {
+        return __awaiter(this, void 0, void 0, function* () {
+            retryNumber = Math.min(ExponentialBackoffCeiling, retryNumber);
+            const ms = ExponentialBackoffTimeSlice * Math.pow(2, retryNumber);
+            return new Promise(resolve => setTimeout(() => resolve(), ms));
+        });
+    }
+    _processResponse(res, options) {
+        return __awaiter(this, void 0, void 0, function* () {
+            return new Promise((resolve, reject) => __awaiter(this, void 0, void 0, function* () {
+                const statusCode = res.message.statusCode || 0;
+                const response = {
+                    statusCode,
+                    result: null,
+                    headers: {}
+                };
+                // not found leads to null obj returned
+                if (statusCode === HttpCodes.NotFound) {
+                    resolve(response);
+                }
+                // get the result from the body
+                function dateTimeDeserializer(key, value) {
+                    if (typeof value === 'string') {
+                        const a = new Date(value);
+                        if (!isNaN(a.valueOf())) {
+                            return a;
+                        }
+                    }
+                    return value;
+                }
+                let obj;
+                let contents;
+                try {
+                    contents = yield res.readBody();
+                    if (contents && contents.length > 0) {
+                        if (options && options.deserializeDates) {
+                            obj = JSON.parse(contents, dateTimeDeserializer);
+                        }
+                        else {
+                            obj = JSON.parse(contents);
+                        }
+                        response.result = obj;
+                    }
+                    response.headers = res.message.headers;
+                }
+                catch (err) {
+                    // Invalid resource (contents not json);  leaving result obj null
+                }
+                // note that 3xx redirects are handled by the http layer.
+                if (statusCode > 299) {
+                    let msg;
+                    // if exception/error in body, attempt to get better error
+                    if (obj && obj.message) {
+                        msg = obj.message;
+                    }
+                    else if (contents && contents.length > 0) {
+                        // it may be the case that the exception is in the body message as string
+                        msg = contents;
+                    }
+                    else {
+                        msg = `Failed request: (${statusCode})`;
+                    }
+                    const err = new HttpClientError(msg, statusCode);
+                    err.result = response.result;
+                    reject(err);
+                }
+                else {
+                    resolve(response);
+                }
+            }));
+        });
+    }
+}
+exports.HttpClient = HttpClient;
+const lowercaseKeys = (obj) => Object.keys(obj).reduce((c, k) => ((c[k.toLowerCase()] = obj[k]), c), {});
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 9835:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.checkBypass = exports.getProxyUrl = void 0;
+function getProxyUrl(reqUrl) {
+    const usingSsl = reqUrl.protocol === 'https:';
+    if (checkBypass(reqUrl)) {
+        return undefined;
+    }
+    const proxyVar = (() => {
+        if (usingSsl) {
+            return process.env['https_proxy'] || process.env['HTTPS_PROXY'];
+        }
+        else {
+            return process.env['http_proxy'] || process.env['HTTP_PROXY'];
+        }
+    })();
+    if (proxyVar) {
+        return new URL(proxyVar);
+    }
+    else {
+        return undefined;
+    }
+}
+exports.getProxyUrl = getProxyUrl;
+function checkBypass(reqUrl) {
+    if (!reqUrl.hostname) {
+        return false;
+    }
+    const noProxy = process.env['no_proxy'] || process.env['NO_PROXY'] || '';
+    if (!noProxy) {
+        return false;
+    }
+    // Determine the request port
+    let reqPort;
+    if (reqUrl.port) {
+        reqPort = Number(reqUrl.port);
+    }
+    else if (reqUrl.protocol === 'http:') {
+        reqPort = 80;
+    }
+    else if (reqUrl.protocol === 'https:') {
+        reqPort = 443;
+    }
+    // Format the request hostname and hostname with port
+    const upperReqHosts = [reqUrl.hostname.toUpperCase()];
+    if (typeof reqPort === 'number') {
+        upperReqHosts.push(`${upperReqHosts[0]}:${reqPort}`);
+    }
+    // Compare request host against noproxy
+    for (const upperNoProxyItem of noProxy
+        .split(',')
+        .map(x => x.trim().toUpperCase())
+        .filter(x => x)) {
+        if (upperReqHosts.some(x => x === upperNoProxyItem)) {
+            return true;
+        }
+    }
+    return false;
+}
+exports.checkBypass = checkBypass;
+//# sourceMappingURL=proxy.js.map
+
+/***/ }),
+
 /***/ 4751:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
@@ -485,13 +1822,13 @@ function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__export(__webpack_require__(2825));
+__export(__nccwpck_require__(2825));
 //# sourceMappingURL=index.js.map
 
 /***/ }),
 
 /***/ 2825:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -499,8 +1836,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-const fs_1 = __webpack_require__(5747);
-const debug_1 = __importDefault(__webpack_require__(8231));
+const fs_1 = __nccwpck_require__(5747);
+const debug_1 = __importDefault(__nccwpck_require__(8231));
 const log = debug_1.default('@kwsites/file-exists');
 function check(path, isFile, isDirectory) {
     log(`checking %s`, path);
@@ -619,7 +1956,7 @@ exports.default = deferred;
 /***/ }),
 
 /***/ 8222:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ ((module, exports, __nccwpck_require__) => {
 
 /* eslint-env browser */
 
@@ -870,7 +2207,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __webpack_require__(6243)(exports);
+module.exports = __nccwpck_require__(6243)(exports);
 
 const {formatters} = module.exports;
 
@@ -890,7 +2227,7 @@ formatters.j = function (v) {
 /***/ }),
 
 /***/ 6243:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
 /**
@@ -905,7 +2242,7 @@ function setup(env) {
 	createDebug.disable = disable;
 	createDebug.enable = enable;
 	createDebug.enabled = enabled;
-	createDebug.humanize = __webpack_require__(900);
+	createDebug.humanize = __nccwpck_require__(900);
 
 	Object.keys(env).forEach(key => {
 		createDebug[key] = env[key];
@@ -1163,7 +2500,7 @@ module.exports = setup;
 /***/ }),
 
 /***/ 8231:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
  * Detect Electron renderer / nwjs process, which is node, but we should
@@ -1171,23 +2508,23 @@ module.exports = setup;
  */
 
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
-	module.exports = __webpack_require__(8222);
+	module.exports = __nccwpck_require__(8222);
 } else {
-	module.exports = __webpack_require__(5332);
+	module.exports = __nccwpck_require__(5332);
 }
 
 
 /***/ }),
 
 /***/ 5332:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ ((module, exports, __nccwpck_require__) => {
 
 /**
  * Module dependencies.
  */
 
-const tty = __webpack_require__(3867);
-const util = __webpack_require__(1669);
+const tty = __nccwpck_require__(3867);
+const util = __nccwpck_require__(1669);
 
 /**
  * This is the Node.js implementation of `debug()`.
@@ -1209,7 +2546,7 @@ exports.colors = [6, 2, 3, 4, 5, 1];
 try {
 	// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 	// eslint-disable-next-line import/no-extraneous-dependencies
-	const supportsColor = __webpack_require__(9318);
+	const supportsColor = __nccwpck_require__(9318);
 
 	if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		exports.colors = [
@@ -1417,7 +2754,7 @@ function init(debug) {
 	}
 }
 
-module.exports = __webpack_require__(6243)(exports);
+module.exports = __nccwpck_require__(6243)(exports);
 
 const {formatters} = module.exports;
 
@@ -1629,7 +2966,7 @@ function plural(ms, msAbs, n, name) {
 /***/ }),
 
 /***/ 254:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ ((module, exports, __nccwpck_require__) => {
 
 /* eslint-env browser */
 
@@ -1885,7 +3222,7 @@ function localstorage() {
 	}
 }
 
-module.exports = __webpack_require__(8867)(exports);
+module.exports = __nccwpck_require__(8867)(exports);
 
 const {formatters} = module.exports;
 
@@ -1905,7 +3242,7 @@ formatters.j = function (v) {
 /***/ }),
 
 /***/ 8867:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
 /**
@@ -1920,7 +3257,7 @@ function setup(env) {
 	createDebug.disable = disable;
 	createDebug.enable = enable;
 	createDebug.enabled = enabled;
-	createDebug.humanize = __webpack_require__(900);
+	createDebug.humanize = __nccwpck_require__(900);
 	createDebug.destroy = destroy;
 
 	Object.keys(env).forEach(key => {
@@ -1943,7 +3280,7 @@ function setup(env) {
 
 	/**
 	* Selects a color for a debug namespace
-	* @param {String} namespace The namespace string for the for the debug instance to be colored
+	* @param {String} namespace The namespace string for the debug instance to be colored
 	* @return {Number|String} An ANSI color code for the given namespace
 	* @api private
 	*/
@@ -1969,6 +3306,8 @@ function setup(env) {
 	function createDebug(namespace) {
 		let prevTime;
 		let enableOverride = null;
+		let namespacesCache;
+		let enabledCache;
 
 		function debug(...args) {
 			// Disabled?
@@ -2029,7 +3368,17 @@ function setup(env) {
 		Object.defineProperty(debug, 'enabled', {
 			enumerable: true,
 			configurable: false,
-			get: () => enableOverride === null ? createDebug.enabled(namespace) : enableOverride,
+			get: () => {
+				if (enableOverride !== null) {
+					return enableOverride;
+				}
+				if (namespacesCache !== createDebug.namespaces) {
+					namespacesCache = createDebug.namespaces;
+					enabledCache = createDebug.enabled(namespace);
+				}
+
+				return enabledCache;
+			},
 			set: v => {
 				enableOverride = v;
 			}
@@ -2058,6 +3407,7 @@ function setup(env) {
 	*/
 	function enable(namespaces) {
 		createDebug.save(namespaces);
+		createDebug.namespaces = namespaces;
 
 		createDebug.names = [];
 		createDebug.skips = [];
@@ -2075,7 +3425,7 @@ function setup(env) {
 			namespaces = split[i].replace(/\*/g, '.*?');
 
 			if (namespaces[0] === '-') {
-				createDebug.skips.push(new RegExp('^' + namespaces.substr(1) + '$'));
+				createDebug.skips.push(new RegExp('^' + namespaces.slice(1) + '$'));
 			} else {
 				createDebug.names.push(new RegExp('^' + namespaces + '$'));
 			}
@@ -2173,7 +3523,7 @@ module.exports = setup;
 /***/ }),
 
 /***/ 2179:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 /**
  * Detect Electron renderer / nwjs process, which is node, but we should
@@ -2181,23 +3531,23 @@ module.exports = setup;
  */
 
 if (typeof process === 'undefined' || process.type === 'renderer' || process.browser === true || process.__nwjs) {
-	module.exports = __webpack_require__(254);
+	module.exports = __nccwpck_require__(254);
 } else {
-	module.exports = __webpack_require__(675);
+	module.exports = __nccwpck_require__(675);
 }
 
 
 /***/ }),
 
 /***/ 675:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ ((module, exports, __nccwpck_require__) => {
 
 /**
  * Module dependencies.
  */
 
-const tty = __webpack_require__(3867);
-const util = __webpack_require__(1669);
+const tty = __nccwpck_require__(3867);
+const util = __nccwpck_require__(1669);
 
 /**
  * This is the Node.js implementation of `debug()`.
@@ -2223,7 +3573,7 @@ exports.colors = [6, 2, 3, 4, 5, 1];
 try {
 	// Optional dependency (as in, doesn't need to be installed, NOT like optionalDependencies in package.json)
 	// eslint-disable-next-line import/no-extraneous-dependencies
-	const supportsColor = __webpack_require__(9318);
+	const supportsColor = __nccwpck_require__(9318);
 
 	if (supportsColor && (supportsColor.stderr || supportsColor).level >= 2) {
 		exports.colors = [
@@ -2431,7 +3781,7 @@ function init(debug) {
 	}
 }
 
-module.exports = __webpack_require__(8867)(exports);
+module.exports = __nccwpck_require__(8867)(exports);
 
 const {formatters} = module.exports;
 
@@ -2459,117 +3809,54 @@ formatters.O = function (v) {
 
 /***/ }),
 
-/***/ 1949:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-const Git = __webpack_require__(4966);
-const {GitConstructError} = __webpack_require__(4732);
-const {createInstanceConfig, folderExists} = __webpack_require__(847);
-
-const api = Object.create(null);
-for (let imported = __webpack_require__(4732), keys = Object.keys(imported), i = 0; i < keys.length; i++) {
-   const name = keys[i];
-   if (/^[A-Z]/.test(name)) {
-      api[name] = imported[name];
-   }
-}
-
-/**
- * Adds the necessary properties to the supplied object to enable it for use as
- * the default export of a module.
- *
- * Eg: `module.exports = esModuleFactory({ something () {} })`
- */
-module.exports.esModuleFactory = function esModuleFactory (defaultExport) {
-   return Object.defineProperties(defaultExport, {
-      __esModule: {value: true},
-      default: {value: defaultExport},
-   });
-}
-
-module.exports.gitExportFactory = function gitExportFactory (factory, extra) {
-   return Object.assign(function () {
-         return factory.apply(null, arguments);
-      },
-      api,
-      extra || {},
-   );
-};
-
-module.exports.gitInstanceFactory = function gitInstanceFactory (baseDir, options) {
-   const config = createInstanceConfig(
-      baseDir && (typeof baseDir === 'string' ? {baseDir} : baseDir),
-      options
-   );
-
-   if (!folderExists(config.baseDir)) {
-      throw new GitConstructError(config, `Cannot use simple-git on a directory that does not exist`);
-   }
-
-   return new Git(config);
-};
-
-
-/***/ }),
-
 /***/ 4966:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
-const {GitExecutor} = __webpack_require__(4701);
+const {GitExecutor} = __nccwpck_require__(4701);
+const {SimpleGitApi} = __nccwpck_require__(999);
 
-const {Scheduler} = __webpack_require__(3421);
-const {GitLogger} = __webpack_require__(7178);
-const {adhocExecTask, configurationErrorTask} = __webpack_require__(2815);
-const {NOOP, appendTaskOptions, asArray, filterArray, filterPrimitives, filterString, filterStringOrStringArray, filterType, folderExists, getTrailingOptions, trailingFunctionArgument, trailingOptionsArgument} = __webpack_require__(847);
-const {applyPatchTask} = __webpack_require__(4931)
-const {branchTask, branchLocalTask, deleteBranchesTask, deleteBranchTask} = __webpack_require__(17);
-const {taskCallback} = __webpack_require__(8850);
-const {checkIsRepoTask} = __webpack_require__(221);
-const {cloneTask, cloneMirrorTask} = __webpack_require__(3173);
-const {addConfigTask, listConfigTask} = __webpack_require__(7597);
-const {cleanWithOptionsTask, isCleanOptionsArray} = __webpack_require__(4386);
-const {commitTask} = __webpack_require__(5494);
-const {diffSummaryTask} = __webpack_require__(9241);
-const {fetchTask} = __webpack_require__(8823);
-const {hashObjectTask} = __webpack_require__(8199);
-const {initTask} = __webpack_require__(6016);
-const {logTask, parseLogOptions} = __webpack_require__(8627);
-const {mergeTask} = __webpack_require__(8829);
-const {moveTask} = __webpack_require__(6520);
-const {pullTask} = __webpack_require__(4636);
-const {pushTagsTask, pushTask} = __webpack_require__(1435);
-const {addRemoteTask, getRemotesTask, listRemotesTask, remoteTask, removeRemoteTask} = __webpack_require__(9866);
-const {getResetMode, resetTask} = __webpack_require__(2377);
-const {stashListTask} = __webpack_require__(810);
-const {statusTask} = __webpack_require__(9197);
-const {addSubModuleTask, initSubModuleTask, subModuleTask, updateSubModuleTask} = __webpack_require__(8772);
-const {addAnnotatedTagTask, addTagTask, tagListTask} = __webpack_require__(8540);
-const {straightThroughStringTask} = __webpack_require__(2815);
-const {parseCheckIgnore} = __webpack_require__(9926);
+const {Scheduler} = __nccwpck_require__(3421);
+const {GitLogger} = __nccwpck_require__(7178);
+const {configurationErrorTask} = __nccwpck_require__(2815);
+const {
+   asArray,
+   filterArray,
+   filterPrimitives,
+   filterString,
+   filterStringOrStringArray,
+   filterType,
+   getTrailingOptions,
+   trailingFunctionArgument,
+   trailingOptionsArgument
+} = __nccwpck_require__(847);
+const {applyPatchTask} = __nccwpck_require__(4931)
+const {branchTask, branchLocalTask, deleteBranchesTask, deleteBranchTask} = __nccwpck_require__(17);
+const {checkIgnoreTask} = __nccwpck_require__(3293);
+const {checkIsRepoTask} = __nccwpck_require__(221);
+const {cloneTask, cloneMirrorTask} = __nccwpck_require__(3173);
+const {cleanWithOptionsTask, isCleanOptionsArray} = __nccwpck_require__(4386);
+const {commitTask} = __nccwpck_require__(5494);
+const {diffSummaryTask} = __nccwpck_require__(9241);
+const {fetchTask} = __nccwpck_require__(8823);
+const {moveTask} = __nccwpck_require__(6520);
+const {pullTask} = __nccwpck_require__(4636);
+const {pushTagsTask} = __nccwpck_require__(1435);
+const {addRemoteTask, getRemotesTask, listRemotesTask, remoteTask, removeRemoteTask} = __nccwpck_require__(9866);
+const {getResetMode, resetTask} = __nccwpck_require__(2377);
+const {stashListTask} = __nccwpck_require__(810);
+const {addSubModuleTask, initSubModuleTask, subModuleTask, updateSubModuleTask} = __nccwpck_require__(8772);
+const {addAnnotatedTagTask, addTagTask, tagListTask} = __nccwpck_require__(8540);
+const {straightThroughBufferTask, straightThroughStringTask} = __nccwpck_require__(2815);
 
-const ChainedExecutor = Symbol('ChainedExecutor');
-
-/**
- * Git handling for node. All public functions can be chained and all `then` handlers are optional.
- *
- * @param {SimpleGitOptions} options Configuration settings for this instance
- *
- * @constructor
- */
-function Git (options) {
+function Git (options, plugins) {
    this._executor = new GitExecutor(
       options.binary, options.baseDir,
-      new Scheduler(options.maxConcurrentProcesses)
+      new Scheduler(options.maxConcurrentProcesses), plugins,
    );
    this._logger = new GitLogger();
 }
 
-/**
- * The executor that runs each of the added commands
- * @type {GitExecutor}
- * @private
- */
-Git.prototype._executor = null;
+(Git.prototype = Object.create(SimpleGitApi.prototype)).constructor = Git;
 
 /**
  * Logging utility for printing out info or error messages to the user
@@ -2609,67 +3896,6 @@ Git.prototype.env = function (name, value) {
 };
 
 /**
- * Sets the working directory of the subsequent commands.
- */
-Git.prototype.cwd = function (workingDirectory) {
-   const task = (typeof workingDirectory !== 'string')
-      ? configurationErrorTask('Git.cwd: workingDirectory must be supplied as a string')
-      : adhocExecTask(() => {
-         if (!folderExists(workingDirectory)) {
-            throw new Error(`Git.cwd: cannot change to non-directory "${ workingDirectory }"`);
-         }
-
-         return (this._executor.cwd = workingDirectory);
-      });
-
-   return this._runTask(task, trailingFunctionArgument(arguments) || NOOP);
-};
-
-/**
- * Sets a handler function to be called whenever a new child process is created, the handler function will be called
- * with the name of the command being run and the stdout & stderr streams used by the ChildProcess.
- *
- * @example
- * require('simple-git')
- *    .outputHandler(function (command, stdout, stderr) {
- *       stdout.pipe(process.stdout);
- *    })
- *    .checkout('https://github.com/user/repo.git');
- *
- * @see https://nodejs.org/api/child_process.html#child_process_class_childprocess
- * @see https://nodejs.org/api/stream.html#stream_class_stream_readable
- * @param {Function} outputHandler
- * @returns {Git}
- */
-Git.prototype.outputHandler = function (outputHandler) {
-   this._executor.outputHandler = outputHandler;
-   return this;
-};
-
-/**
- * Initialize a git repo
- *
- * @param {Boolean} [bare=false]
- * @param {Function} [then]
- */
-Git.prototype.init = function (bare, then) {
-   return this._runTask(
-      initTask(bare === true, this._executor.cwd, getTrailingOptions(arguments)),
-      trailingFunctionArgument(arguments),
-   );
-};
-
-/**
- * Check the status of the local repo
- */
-Git.prototype.status = function () {
-   return this._runTask(
-      statusTask(getTrailingOptions(arguments)),
-      trailingFunctionArgument(arguments),
-   );
-};
-
-/**
  * List the stash(s) of the local repo
  */
 Git.prototype.stashList = function (options) {
@@ -2678,19 +3904,6 @@ Git.prototype.stashList = function (options) {
          trailingOptionsArgument(arguments) || {},
          filterArray(options) && options || []
       ),
-      trailingFunctionArgument(arguments),
-   );
-};
-
-/**
- * Stash the local repo
- *
- * @param {Object|Array} [options]
- * @param {Function} [then]
- */
-Git.prototype.stash = function (options, then) {
-   return this._runTask(
-      straightThroughStringTask(['stash', ...getTrailingOptions(arguments)]),
       trailingFunctionArgument(arguments),
    );
 };
@@ -2751,16 +3964,6 @@ Git.prototype.checkoutLatestTag = function (then) {
 };
 
 /**
- * Adds one or more files to source control
- */
-Git.prototype.add = function (files) {
-   return this._run(
-      ['add'].concat(files),
-      trailingFunctionArgument(arguments),
-   );
-};
-
-/**
  * Commits changes in the current working directory - when specific file paths are supplied, only changes on those
  * files will be committed.
  *
@@ -2775,8 +3978,7 @@ Git.prototype.commit = function (message, files, options, then) {
 
    if (filterStringOrStringArray(message)) {
       messages.push(...asArray(message));
-   }
-   else {
+   } else {
       console.warn('simple-git deprecation notice: git.commit: requires the commit message to be supplied as a string/string[], this will be an error in version 3');
    }
 
@@ -2825,6 +4027,7 @@ Git.prototype.fetch = function (remote, branch) {
  * @returns {Git}
  */
 Git.prototype.silent = function (silence) {
+   console.warn('simple-git deprecation notice: git.silent: logging should be configured using the `debug` library / `DEBUG` environment variable, this will be an error in version 3');
    this._logger.silent(!!silence);
    return this;
 };
@@ -2850,20 +4053,16 @@ Git.prototype.tags = function (options, then) {
  * to be sent to the `git rebase` command, or a standard options object.
  */
 Git.prototype.rebase = function () {
-   return this._run(
-      ['rebase'].concat(getTrailingOptions(arguments)),
+   return this._runTask(
+      straightThroughStringTask(['rebase', ...getTrailingOptions(arguments)]),
       trailingFunctionArgument(arguments)
    );
 };
 
 /**
  * Reset a repo
- *
- * @param {string|string[]} [mode=soft] Either an array of arguments supported by the 'git reset' command, or the
- *                                        string value 'soft' or 'hard' to set the reset mode.
- * @param {Function} [then]
  */
-Git.prototype.reset = function (mode, then) {
+Git.prototype.reset = function (mode) {
    return this._runTask(
       resetTask(getResetMode(mode), getTrailingOptions(arguments)),
       trailingFunctionArgument(arguments),
@@ -2883,20 +4082,16 @@ Git.prototype.revert = function (commit) {
       );
    }
 
-   return this._run([
-      'revert',
-      ...getTrailingOptions(arguments, 0, true),
-      commit
-   ], next);
+   return this._runTask(
+      straightThroughStringTask(['revert', ...getTrailingOptions(arguments, 0, true), commit]),
+      next
+   );
 };
 
 /**
  * Add a lightweight tag to the head of the current branch
- *
- * @param {string} name
- * @param {Function} [then]
  */
-Git.prototype.addTag = function (name, then) {
+Git.prototype.addTag = function (name) {
    const task = (typeof name === 'string')
       ? addTagTask(name)
       : configurationErrorTask('Git.addTag requires a tag name');
@@ -2906,12 +4101,8 @@ Git.prototype.addTag = function (name, then) {
 
 /**
  * Add an annotated tag to the head of the current branch
- *
- * @param {string} tagName
- * @param {string} tagMessage
- * @param {Function} [then]
  */
-Git.prototype.addAnnotatedTag = function (tagName, tagMessage, then) {
+Git.prototype.addAnnotatedTag = function (tagName, tagMessage) {
    return this._runTask(
       addAnnotatedTagTask(tagName, tagMessage),
       trailingFunctionArgument(arguments),
@@ -2920,12 +4111,9 @@ Git.prototype.addAnnotatedTag = function (tagName, tagMessage, then) {
 
 /**
  * Check out a tag or revision, any number of additional arguments can be passed to the `git checkout` command
- * by supplying either a string or array of strings as the `what` parameter.
- *
- * @param {string|string[]} what One or more commands to pass to `git checkout`
- * @param {Function} [then]
+ * by supplying either a string or array of strings as the first argument.
  */
-Git.prototype.checkout = function (what, then) {
+Git.prototype.checkout = function () {
    const commands = ['checkout', ...getTrailingOptions(arguments, true)];
    return this._runTask(
       straightThroughStringTask(commands),
@@ -2997,25 +4185,6 @@ Git.prototype.branchLocal = function (then) {
 };
 
 /**
- * Add config to local git instance
- *
- * @param {string} key configuration key (e.g user.name)
- * @param {string} value for the given key (e.g your name)
- * @param {boolean} [append=false] optionally append the key/value pair (equivalent of passing `--add` option).
- * @param {Function} [then]
- */
-Git.prototype.addConfig = function (key, value, append, then) {
-   return this._runTask(
-      addConfigTask(key, value, typeof append === "boolean" ? append : false),
-      trailingFunctionArgument(arguments),
-   );
-};
-
-Git.prototype.listConfig = function () {
-   return this._runTask(listConfigTask(), trailingFunctionArgument(arguments));
-};
-
-/**
  * Executes any command against the git binary.
  */
 Git.prototype.raw = function (commands) {
@@ -3042,7 +4211,7 @@ Git.prototype.raw = function (commands) {
       );
    }
 
-   return this._run(command, next);
+   return this._runTask(straightThroughStringTask(command), next);
 };
 
 Git.prototype.submoduleAdd = function (repo, path, then) {
@@ -3112,16 +4281,6 @@ Git.prototype.getRemotes = function (verbose, then) {
 };
 
 /**
- * Compute object ID from a file
- */
-Git.prototype.hashObject = function (path, write) {
-   return this._runTask(
-      hashObjectTask(path, write === true),
-      trailingFunctionArgument(arguments),
-   );
-};
-
-/**
  * Call any `git remote` function with arguments passed as an array of strings.
  *
  * @param {string[]} options
@@ -3130,49 +4289,6 @@ Git.prototype.hashObject = function (path, write) {
 Git.prototype.remote = function (options, then) {
    return this._runTask(
       remoteTask(getTrailingOptions(arguments)),
-      trailingFunctionArgument(arguments),
-   );
-};
-
-/**
- * Merges from one branch to another, equivalent to running `git merge ${from} $[to}`, the `options` argument can
- * either be an array of additional parameters to pass to the command or null / omitted to be ignored.
- *
- * @param {string} from
- * @param {string} to
- */
-Git.prototype.mergeFromTo = function (from, to) {
-   if (!(filterString(from) && filterString(to))) {
-      return this._runTask(configurationErrorTask(
-         `Git.mergeFromTo requires that the 'from' and 'to' arguments are supplied as strings`
-      ));
-   }
-
-   return this._runTask(
-      mergeTask([from, to, ...getTrailingOptions(arguments)]),
-      trailingFunctionArgument(arguments, false),
-   );
-};
-
-/**
- * Runs a merge, `options` can be either an array of arguments
- * supported by the [`git merge`](https://git-scm.com/docs/git-merge)
- * or an options object.
- *
- * Conflicts during the merge result in an error response,
- * the response type whether it was an error or success will be a MergeSummary instance.
- * When successful, the MergeSummary has all detail from a the PullSummary
- *
- * @param {Object | string[]} [options]
- * @param {Function} [then]
- * @returns {*}
- *
- * @see ./responses/MergeSummary.js
- * @see ./responses/PullSummary.js
- */
-Git.prototype.merge = function () {
-   return this._runTask(
-      mergeTask(getTrailingOptions(arguments)),
       trailingFunctionArgument(arguments),
    );
 };
@@ -3190,7 +4306,10 @@ Git.prototype.tag = function (options, then) {
       command.unshift('tag');
    }
 
-   return this._run(command, trailingFunctionArgument(arguments));
+   return this._runTask(
+      straightThroughStringTask(command),
+      trailingFunctionArgument(arguments)
+   );
 };
 
 /**
@@ -3199,19 +4318,10 @@ Git.prototype.tag = function (options, then) {
  * @param {Function} [then]
  */
 Git.prototype.updateServerInfo = function (then) {
-   return this._run(["update-server-info"], trailingFunctionArgument(arguments));
-};
-
-/**
- * Pushes the current committed changes to a remote, optionally specify the names of the remote and branch to use
- * when pushing. Supply multiple options as an array of strings in the first argument - see examples below.
- */
-Git.prototype.push = function (remote, branch, then) {
-   const task = pushTask(
-      {remote: filterType(remote, filterString), branch: filterType(branch, filterString)},
-      getTrailingOptions(arguments),
+   return this._runTask(
+      straightThroughStringTask(['update-server-info']),
+      trailingFunctionArgument(arguments),
    );
-   return this._runTask(task, trailingFunctionArgument(arguments));
 };
 
 /**
@@ -3229,12 +4339,12 @@ Git.prototype.pushTags = function (remote, then) {
 
 /**
  * Removes the named files from source control.
- *
- * @param {string|string[]} files
- * @param {Function} [then]
  */
-Git.prototype.rm = function (files, then) {
-   return this._rm(files, '-f', then);
+Git.prototype.rm = function (files) {
+   return this._runTask(
+      straightThroughStringTask(['rm', '-f', ...asArray(files)]),
+      trailingFunctionArgument(arguments)
+   );
 };
 
 /**
@@ -3242,10 +4352,12 @@ Git.prototype.rm = function (files, then) {
  * completely remove the files, use `rm`.
  *
  * @param {string|string[]} files
- * @param {Function} [then]
  */
-Git.prototype.rmKeepLocal = function (files, then) {
-   return this._rm(files, '--cached', then);
+Git.prototype.rmKeepLocal = function (files) {
+   return this._runTask(
+      straightThroughStringTask(['rm', '--cached', ...asArray(files)]),
+      trailingFunctionArgument(arguments)
+   );
 };
 
 /**
@@ -3261,13 +4373,7 @@ Git.prototype.catFile = function (options, then) {
    return this._catFile('utf-8', arguments);
 };
 
-/**
- * Equivalent to `catFile` but will return the native `Buffer` of content from the git command's stdout.
- *
- * @param {string[]} options
- * @param then
- */
-Git.prototype.binaryCatFile = function (options, then) {
+Git.prototype.binaryCatFile = function () {
    return this._catFile('buffer', arguments);
 };
 
@@ -3278,7 +4384,7 @@ Git.prototype._catFile = function (format, args) {
 
    if (typeof options === 'string') {
       return this._runTask(
-         configurationErrorTask('Git#catFile: options must be supplied as an array of strings'),
+         configurationErrorTask('Git.catFile: options must be supplied as an array of strings'),
          handler,
       );
    }
@@ -3287,9 +4393,11 @@ Git.prototype._catFile = function (format, args) {
       command.push.apply(command, options);
    }
 
-   return this._run(command, handler, {
-      format: format
-   });
+   const task = format === 'buffer'
+      ? straightThroughBufferTask(command)
+      : straightThroughStringTask(command);
+
+   return this._runTask(task, handler);
 };
 
 Git.prototype.diff = function (options, then) {
@@ -3313,7 +4421,7 @@ Git.prototype.diffSummary = function () {
    );
 };
 
-Git.prototype.applyPatch = function(patches) {
+Git.prototype.applyPatch = function (patches) {
    const task = !filterStringOrStringArray(patches)
       ? configurationErrorTask(`git.applyPatch requires one or more string patches as the first argument`)
       : applyPatchTask(asArray(patches), getTrailingOptions([].slice.call(arguments, 1)));
@@ -3358,10 +4466,6 @@ Git.prototype.clean = function (mode, options, then) {
    );
 };
 
-/**
- * Call a simple function at the next step in the chain.
- * @param {Function} [then]
- */
 Git.prototype.exec = function (then) {
    const task = {
       commands: [],
@@ -3374,38 +4478,6 @@ Git.prototype.exec = function (then) {
    };
 
    return this._runTask(task);
-};
-
-/**
- * Show commit logs from `HEAD` to the first commit.
- * If provided between `options.from` and `options.to` tags or branch.
- *
- * Additionally you can provide options.file, which is the path to a file in your repository. Then only this file will be considered.
- *
- * To use a custom splitter in the log format, set `options.splitter` to be the string the log should be split on.
- *
- * Options can also be supplied as a standard options object for adding custom properties supported by the git log command.
- * For any other set of options, supply options as an array of strings to be appended to the git log command.
- */
-Git.prototype.log = function (options) {
-   const next = trailingFunctionArgument(arguments);
-
-   if (filterString(arguments[0]) && filterString(arguments[1])) {
-      return this._runTask(
-         configurationErrorTask(`git.log(string, string) should be replaced with git.log({ from: string, to: string })`),
-         next
-      );
-   }
-
-   const parsedOptions = parseLogOptions(
-      trailingOptionsArgument(arguments) || {},
-      filterArray(options) && options || []
-   );
-
-   return this._runTask(
-      logTask(parsedOptions.splitter, parsedOptions.fields, parsedOptions.commands),
-      next,
-   )
 };
 
 /**
@@ -3426,13 +4498,10 @@ Git.prototype.clearQueue = function () {
  * @param {Function} [then]
  */
 Git.prototype.checkIgnore = function (pathnames, then) {
-   return this._run(
-      ["check-ignore", ...asArray((filterType(pathnames, filterStringOrStringArray, [])))],
+   return this._runTask(
+      checkIgnoreTask(asArray((filterType(pathnames, filterStringOrStringArray, [])))),
       trailingFunctionArgument(arguments),
-      {
-         parser: parseCheckIgnore
-      }
-   )
+   );
 };
 
 Git.prototype.checkIsRepo = function (checkType, then) {
@@ -3442,74 +4511,17 @@ Git.prototype.checkIsRepo = function (checkType, then) {
    );
 };
 
-Git.prototype._rm = function (_files, options, then) {
-   var files = [].concat(_files);
-   var args = ['rm', options];
-   args.push.apply(args, files);
-
-   return this._run(args, trailingFunctionArgument(arguments));
-};
-
-/**
- * Schedules the supplied command to be run, the command should not include the name of the git binary and should
- * be an array of strings passed as the arguments to the git binary.
- *
- * @param {string[]} command
- * @param {Function} then
- * @param {Object} [opt]
- * @param {boolean} [opt.concatStdErr=false] Optionally concatenate stderr output into the stdout
- * @param {boolean} [opt.format="utf-8"] The format to use when reading the content of stdout
- * @param {Function} [opt.onError] Optional error handler for this command - can be used to allow non-clean exits
- *                                  without killing the remaining stack of commands
- * @param {Function} [opt.parser] Optional parser function
- * @param {number} [opt.onError.exitCode]
- * @param {string} [opt.onError.stdErr]
- *
- * @returns {Git}
- */
-Git.prototype._run = function (command, then, opt) {
-
-   const task = Object.assign({
-      concatStdErr: false,
-      onError: undefined,
-      format: 'utf-8',
-      parser (data) {
-         return data;
-      }
-   }, opt || {}, {
-      commands: command,
-   });
-
-   return this._runTask(task, then);
-};
-
-Git.prototype._runTask = function (task, then) {
-   const executor = this[ChainedExecutor] || this._executor.chain();
-   const promise = executor.push(task);
-
-   taskCallback(
-      task,
-      promise,
-      then);
-
-   return Object.create(this, {
-      then: {value: promise.then.bind(promise)},
-      catch: {value: promise.catch.bind(promise)},
-      [ChainedExecutor]: {value: executor},
-   });
-};
-
 module.exports = Git;
 
 
 /***/ }),
 
 /***/ 1477:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 
-const {gitP} = __webpack_require__(941);
-const {esModuleFactory, gitInstanceFactory, gitExportFactory} = __webpack_require__(1949);
+const {gitP} = __nccwpck_require__(941);
+const {esModuleFactory, gitInstanceFactory, gitExportFactory} = __nccwpck_require__(9846);
 
 module.exports = esModuleFactory(
    gitExportFactory(gitInstanceFactory, {gitP})
@@ -3519,38 +4531,46 @@ module.exports = esModuleFactory(
 /***/ }),
 
 /***/ 4732:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.TaskConfigurationError = exports.GitResponseError = exports.GitError = exports.GitConstructError = exports.ResetMode = exports.CheckRepoActions = exports.CleanOptions = void 0;
-var clean_1 = __webpack_require__(4386);
-Object.defineProperty(exports, "CleanOptions", ({ enumerable: true, get: function () { return clean_1.CleanOptions; } }));
-var check_is_repo_1 = __webpack_require__(221);
-Object.defineProperty(exports, "CheckRepoActions", ({ enumerable: true, get: function () { return check_is_repo_1.CheckRepoActions; } }));
-var reset_1 = __webpack_require__(2377);
-Object.defineProperty(exports, "ResetMode", ({ enumerable: true, get: function () { return reset_1.ResetMode; } }));
-var git_construct_error_1 = __webpack_require__(1876);
-Object.defineProperty(exports, "GitConstructError", ({ enumerable: true, get: function () { return git_construct_error_1.GitConstructError; } }));
-var git_error_1 = __webpack_require__(5757);
-Object.defineProperty(exports, "GitError", ({ enumerable: true, get: function () { return git_error_1.GitError; } }));
-var git_response_error_1 = __webpack_require__(5131);
-Object.defineProperty(exports, "GitResponseError", ({ enumerable: true, get: function () { return git_response_error_1.GitResponseError; } }));
-var task_configuration_error_1 = __webpack_require__(740);
-Object.defineProperty(exports, "TaskConfigurationError", ({ enumerable: true, get: function () { return task_configuration_error_1.TaskConfigurationError; } }));
+const git_construct_error_1 = __nccwpck_require__(1876);
+const git_error_1 = __nccwpck_require__(5757);
+const git_plugin_error_1 = __nccwpck_require__(19);
+const git_response_error_1 = __nccwpck_require__(5131);
+const task_configuration_error_1 = __nccwpck_require__(740);
+const check_is_repo_1 = __nccwpck_require__(221);
+const clean_1 = __nccwpck_require__(4386);
+const config_1 = __nccwpck_require__(7597);
+const grep_1 = __nccwpck_require__(5524);
+const reset_1 = __nccwpck_require__(2377);
+const api = {
+    CheckRepoActions: check_is_repo_1.CheckRepoActions,
+    CleanOptions: clean_1.CleanOptions,
+    GitConfigScope: config_1.GitConfigScope,
+    GitConstructError: git_construct_error_1.GitConstructError,
+    GitError: git_error_1.GitError,
+    GitPluginError: git_plugin_error_1.GitPluginError,
+    GitResponseError: git_response_error_1.GitResponseError,
+    ResetMode: reset_1.ResetMode,
+    TaskConfigurationError: task_configuration_error_1.TaskConfigurationError,
+    grepQueryBuilder: grep_1.grepQueryBuilder,
+};
+exports.default = api;
 //# sourceMappingURL=api.js.map
 
 /***/ }),
 
 /***/ 1876:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GitConstructError = void 0;
-const git_error_1 = __webpack_require__(5757);
+const git_error_1 = __nccwpck_require__(5757);
 /**
  * The `GitConstructError` is thrown when an error occurs in the constructor
  * of the `simple-git` instance itself. Most commonly as a result of using
@@ -3615,14 +4635,35 @@ exports.GitError = GitError;
 
 /***/ }),
 
+/***/ 19:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GitPluginError = void 0;
+const git_error_1 = __nccwpck_require__(5757);
+class GitPluginError extends git_error_1.GitError {
+    constructor(task, plugin, message) {
+        super(task, message);
+        this.task = task;
+        this.plugin = plugin;
+        Object.setPrototypeOf(this, new.target.prototype);
+    }
+}
+exports.GitPluginError = GitPluginError;
+//# sourceMappingURL=git-plugin-error.js.map
+
+/***/ }),
+
 /***/ 5131:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GitResponseError = void 0;
-const git_error_1 = __webpack_require__(5757);
+const git_error_1 = __nccwpck_require__(5757);
 /**
  * The `GitResponseError` is the wrapper for a parsed response that is treated as
  * a fatal error, for example attempting a `merge` can leave the repo in a corrupted
@@ -3659,13 +4700,13 @@ exports.GitResponseError = GitResponseError;
 /***/ }),
 
 /***/ 740:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TaskConfigurationError = void 0;
-const git_error_1 = __webpack_require__(5757);
+const git_error_1 = __nccwpck_require__(5757);
 /**
  * The `TaskConfigurationError` is thrown when a command was incorrectly
  * configured. An error of this kind means that no attempt was made to
@@ -3684,15 +4725,67 @@ exports.TaskConfigurationError = TaskConfigurationError;
 
 /***/ }),
 
-/***/ 7178:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ 9846:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.GitLogger = exports.createLogger = exports.log = void 0;
-const debug_1 = __webpack_require__(2179);
-const utils_1 = __webpack_require__(847);
+exports.gitInstanceFactory = exports.gitExportFactory = exports.esModuleFactory = void 0;
+const api_1 = __nccwpck_require__(4732);
+const plugins_1 = __nccwpck_require__(8078);
+const utils_1 = __nccwpck_require__(847);
+const Git = __nccwpck_require__(4966);
+/**
+ * Adds the necessary properties to the supplied object to enable it for use as
+ * the default export of a module.
+ *
+ * Eg: `module.exports = esModuleFactory({ something () {} })`
+ */
+function esModuleFactory(defaultExport) {
+    return Object.defineProperties(defaultExport, {
+        __esModule: { value: true },
+        default: { value: defaultExport },
+    });
+}
+exports.esModuleFactory = esModuleFactory;
+function gitExportFactory(factory, extra) {
+    return Object.assign(function (...args) {
+        return factory.apply(null, args);
+    }, api_1.default, extra || {});
+}
+exports.gitExportFactory = gitExportFactory;
+function gitInstanceFactory(baseDir, options) {
+    const plugins = new plugins_1.PluginStore();
+    const config = utils_1.createInstanceConfig(baseDir && (typeof baseDir === 'string' ? { baseDir } : baseDir) || {}, options);
+    if (!utils_1.folderExists(config.baseDir)) {
+        throw new api_1.default.GitConstructError(config, `Cannot use simple-git on a directory that does not exist`);
+    }
+    if (Array.isArray(config.config)) {
+        plugins.add(plugins_1.commandConfigPrefixingPlugin(config.config));
+    }
+    plugins.add(plugins_1.completionDetectionPlugin(config.completion));
+    config.progress && plugins.add(plugins_1.progressMonitorPlugin(config.progress));
+    config.timeout && plugins.add(plugins_1.timeoutPlugin(config.timeout));
+    config.spawnOptions && plugins.add(plugins_1.spawnOptionsPlugin(config.spawnOptions));
+    plugins.add(plugins_1.errorDetectionPlugin(plugins_1.errorDetectionHandler(true)));
+    config.errors && plugins.add(plugins_1.errorDetectionPlugin(config.errors));
+    return new Git(config, plugins);
+}
+exports.gitInstanceFactory = gitInstanceFactory;
+//# sourceMappingURL=git-factory.js.map
+
+/***/ }),
+
+/***/ 7178:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.GitLogger = exports.createLogger = void 0;
+const debug_1 = __nccwpck_require__(2179);
+const utils_1 = __nccwpck_require__(847);
 debug_1.default.formatters.L = (value) => String(utils_1.filterHasLength(value) ? value.length : '-');
 debug_1.default.formatters.B = (value) => {
     if (Buffer.isBuffer(value)) {
@@ -3700,10 +4793,9 @@ debug_1.default.formatters.B = (value) => {
     }
     return utils_1.objectToString(value);
 };
-/**
- * The shared debug logging instance
- */
-exports.log = debug_1.default('simple-git');
+function createLog() {
+    return debug_1.default('simple-git');
+}
 function prefixedLogger(to, prefix, forward) {
     if (!prefix || !String(prefix).replace(/\s*/, '')) {
         return !forward ? to : (message, ...args) => {
@@ -3728,19 +4820,12 @@ function childLoggerName(name, childDebugger, { namespace: parentNamespace }) {
     }
     return childNamespace || parentNamespace;
 }
-function createLogger(label, verbose, initialStep, infoDebugger = exports.log) {
+function createLogger(label, verbose, initialStep, infoDebugger = createLog()) {
     const labelPrefix = label && `[${label}]` || '';
     const spawned = [];
     const debugDebugger = (typeof verbose === 'string') ? infoDebugger.extend(verbose) : verbose;
     const key = childLoggerName(utils_1.filterType(verbose, utils_1.filterString), debugDebugger, infoDebugger);
     return step(initialStep);
-    function destroy() {
-        spawned.forEach(logger => logger.destroy());
-        spawned.length = 0;
-    }
-    function child(name) {
-        return utils_1.append(spawned, createLogger(label, debugDebugger && debugDebugger.extend(name) || name));
-    }
     function sibling(name, initial) {
         return utils_1.append(spawned, createLogger(label, key.replace(/^[^:]+/, name), initial, infoDebugger));
     }
@@ -3749,14 +4834,10 @@ function createLogger(label, verbose, initialStep, infoDebugger = exports.log) {
         const debug = debugDebugger && prefixedLogger(debugDebugger, stepPrefix) || utils_1.NOOP;
         const info = prefixedLogger(infoDebugger, `${labelPrefix} ${stepPrefix}`, debug);
         return Object.assign(debugDebugger ? debug : info, {
-            key,
             label,
-            child,
             sibling,
-            debug,
             info,
             step,
-            destroy,
         });
     }
 }
@@ -3766,7 +4847,7 @@ exports.createLogger = createLogger;
  * any warnings or errors.
  */
 class GitLogger {
-    constructor(_out = exports.log) {
+    constructor(_out = createLog()) {
         this._out = _out;
         this.error = prefixedLogger(_out, '[ERROR]');
         this.warn = prefixedLogger(_out, '[WARN]');
@@ -3805,14 +4886,14 @@ exports.GitLogger = GitLogger;
 /***/ }),
 
 /***/ 6086:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.hasBranchDeletionError = exports.parseBranchDeletions = void 0;
-const BranchDeleteSummary_1 = __webpack_require__(3755);
-const utils_1 = __webpack_require__(847);
+const BranchDeleteSummary_1 = __nccwpck_require__(3755);
+const utils_1 = __nccwpck_require__(847);
 const deleteSuccessRegex = /(\S+)\s+\(\S+\s([^)]+)\)/;
 const deleteErrorRegex = /^error[^']+'([^']+)'/m;
 const parsers = [
@@ -3828,8 +4909,8 @@ const parsers = [
         result.branches[branch] = deletion;
     }),
 ];
-const parseBranchDeletions = (stdOut) => {
-    return utils_1.parseStringResponse(new BranchDeleteSummary_1.BranchDeletionBatch(), parsers, stdOut);
+const parseBranchDeletions = (stdOut, stdErr) => {
+    return utils_1.parseStringResponse(new BranchDeleteSummary_1.BranchDeletionBatch(), parsers, stdOut, stdErr);
 };
 exports.parseBranchDeletions = parseBranchDeletions;
 function hasBranchDeletionError(data, processExitCode) {
@@ -3841,19 +4922,19 @@ exports.hasBranchDeletionError = hasBranchDeletionError;
 /***/ }),
 
 /***/ 9264:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseBranchSummary = void 0;
-const BranchSummary_1 = __webpack_require__(4446);
-const utils_1 = __webpack_require__(847);
+const BranchSummary_1 = __nccwpck_require__(4446);
+const utils_1 = __nccwpck_require__(847);
 const parsers = [
     new utils_1.LineParser(/^(\*\s)?\((?:HEAD )?detached (?:from|at) (\S+)\)\s+([a-z0-9]+)\s(.*)$/, (result, [current, name, commit, label]) => {
         result.push(!!current, true, name, commit, label);
     }),
-    new utils_1.LineParser(/^(\*\s)?(\S+)\s+([a-z0-9]+)\s(.*)$/, (result, [current, name, commit, label]) => {
+    new utils_1.LineParser(/^(\*\s)?(\S+)\s+([a-z0-9]+)\s(.*)$/s, (result, [current, name, commit, label]) => {
         result.push(!!current, false, name, commit, label);
     })
 ];
@@ -3866,15 +4947,15 @@ exports.parseBranchSummary = parseBranchSummary;
 /***/ }),
 
 /***/ 3026:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseCommitResult = void 0;
-const utils_1 = __webpack_require__(847);
+const utils_1 = __nccwpck_require__(847);
 const parsers = [
-    new utils_1.LineParser(/\[([^\s]+)( \([^)]+\))? ([^\]]+)/, (result, [branch, root, commit]) => {
+    new utils_1.LineParser(/^\[([^\s]+)( \([^)]+\))? ([^\]]+)/, (result, [branch, root, commit]) => {
         result.branch = branch;
         result.commit = commit;
         result.root = !!root;
@@ -3926,13 +5007,13 @@ exports.parseCommitResult = parseCommitResult;
 /***/ }),
 
 /***/ 2024:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseDiffResult = void 0;
-const DiffSummary_1 = __webpack_require__(4781);
+const DiffSummary_1 = __nccwpck_require__(4781);
 function parseDiffResult(stdOut) {
     const lines = stdOut.trim().split('\n');
     const status = new DiffSummary_1.DiffSummary();
@@ -4007,13 +5088,13 @@ function binaryFileChange(input, { files }) {
 /***/ }),
 
 /***/ 6254:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseFetchResult = void 0;
-const utils_1 = __webpack_require__(847);
+const utils_1 = __nccwpck_require__(847);
 const parsers = [
     new utils_1.LineParser(/From (.+)$/, (result, [remote]) => {
         result.remote = remote;
@@ -4046,14 +5127,14 @@ exports.parseFetchResult = parseFetchResult;
 /***/ }),
 
 /***/ 9729:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createListLogSummaryParser = exports.SPLITTER = exports.COMMIT_BOUNDARY = exports.START_BOUNDARY = void 0;
-const utils_1 = __webpack_require__(847);
-const parse_diff_summary_1 = __webpack_require__(2024);
+const utils_1 = __nccwpck_require__(847);
+const parse_diff_summary_1 = __nccwpck_require__(2024);
 exports.START_BOUNDARY = 'òòòòòò ';
 exports.COMMIT_BOUNDARY = ' òò';
 exports.SPLITTER = ' ò ';
@@ -4088,15 +5169,15 @@ exports.createListLogSummaryParser = createListLogSummaryParser;
 /***/ }),
 
 /***/ 6412:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseMergeDetail = exports.parseMergeResult = void 0;
-const MergeSummary_1 = __webpack_require__(1651);
-const utils_1 = __webpack_require__(847);
-const parse_pull_1 = __webpack_require__(5658);
+const MergeSummary_1 = __nccwpck_require__(1651);
+const utils_1 = __nccwpck_require__(847);
+const parse_pull_1 = __nccwpck_require__(5658);
 const parsers = [
     new utils_1.LineParser(/^Auto-merging\s+(.+)$/, (summary, [autoMerge]) => {
         summary.merges.push(autoMerge);
@@ -4134,13 +5215,13 @@ exports.parseMergeDetail = parseMergeDetail;
 /***/ }),
 
 /***/ 7444:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseMoveResult = void 0;
-const utils_1 = __webpack_require__(847);
+const utils_1 = __nccwpck_require__(847);
 const parsers = [
     new utils_1.LineParser(/^Renaming (.+) to (.+)$/, (result, [from, to]) => {
         result.moves.push({ from, to });
@@ -4155,15 +5236,15 @@ exports.parseMoveResult = parseMoveResult;
 /***/ }),
 
 /***/ 5658:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parsePullResult = exports.parsePullDetail = void 0;
-const PullSummary_1 = __webpack_require__(3567);
-const utils_1 = __webpack_require__(847);
-const parse_remote_messages_1 = __webpack_require__(2661);
+const PullSummary_1 = __nccwpck_require__(3567);
+const utils_1 = __nccwpck_require__(847);
+const parse_remote_messages_1 = __nccwpck_require__(2661);
 const FILE_UPDATE_REGEX = /^\s*(.+?)\s+\|\s+\d+\s*(\+*)(-*)/;
 const SUMMARY_REGEX = /(\d+)\D+((\d+)\D+\(\+\))?(\D+(\d+)\D+\(-\))?/;
 const ACTION_REGEX = /^(create|delete) mode \d+ (.+)/;
@@ -4204,14 +5285,14 @@ exports.parsePullResult = parsePullResult;
 /***/ }),
 
 /***/ 8530:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parsePushDetail = exports.parsePushResult = void 0;
-const utils_1 = __webpack_require__(847);
-const parse_remote_messages_1 = __webpack_require__(2661);
+const utils_1 = __nccwpck_require__(847);
+const parse_remote_messages_1 = __nccwpck_require__(2661);
 function pushResultPushedItem(local, remote, status) {
     const deleted = status.includes('deleted');
     const tag = status.includes('tag') || /^refs\/tags/.test(local);
@@ -4269,14 +5350,14 @@ exports.parsePushDetail = parsePushDetail;
 /***/ }),
 
 /***/ 2661:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.RemoteMessageSummary = exports.parseRemoteMessages = void 0;
-const utils_1 = __webpack_require__(847);
-const parse_remote_objects_1 = __webpack_require__(3565);
+const utils_1 = __nccwpck_require__(847);
+const parse_remote_objects_1 = __nccwpck_require__(3565);
 const parsers = [
     new utils_1.RemoteLineParser(/^remote:\s*(.+)$/, (result, [text]) => {
         result.remoteMessages.all.push(text.trim());
@@ -4309,13 +5390,13 @@ exports.RemoteMessageSummary = RemoteMessageSummary;
 /***/ }),
 
 /***/ 3565:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.remoteMessagesObjectParsers = void 0;
-const utils_1 = __webpack_require__(847);
+const utils_1 = __nccwpck_require__(847);
 function objectEnumerationResult(remoteMessages) {
     return (remoteMessages.objects = remoteMessages.objects || {
         compressing: 0,
@@ -4353,6 +5434,352 @@ exports.remoteMessagesObjectParsers = [
     }),
 ];
 //# sourceMappingURL=parse-remote-objects.js.map
+
+/***/ }),
+
+/***/ 2581:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.commandConfigPrefixingPlugin = void 0;
+const utils_1 = __nccwpck_require__(847);
+function commandConfigPrefixingPlugin(configuration) {
+    const prefix = utils_1.prefixedArray(configuration, '-c');
+    return {
+        type: 'spawn.args',
+        action(data) {
+            return [...prefix, ...data];
+        },
+    };
+}
+exports.commandConfigPrefixingPlugin = commandConfigPrefixingPlugin;
+//# sourceMappingURL=command-config-prefixing-plugin.js.map
+
+/***/ }),
+
+/***/ 179:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.completionDetectionPlugin = void 0;
+const promise_deferred_1 = __nccwpck_require__(9819);
+const utils_1 = __nccwpck_require__(847);
+const never = promise_deferred_1.default().promise;
+function completionDetectionPlugin({ onClose = true, onExit = 50 } = {}) {
+    function createEvents() {
+        let exitCode = -1;
+        const events = {
+            close: promise_deferred_1.default(),
+            closeTimeout: promise_deferred_1.default(),
+            exit: promise_deferred_1.default(),
+            exitTimeout: promise_deferred_1.default(),
+        };
+        const result = Promise.race([
+            onClose === false ? never : events.closeTimeout.promise,
+            onExit === false ? never : events.exitTimeout.promise,
+        ]);
+        configureTimeout(onClose, events.close, events.closeTimeout);
+        configureTimeout(onExit, events.exit, events.exitTimeout);
+        return {
+            close(code) {
+                exitCode = code;
+                events.close.done();
+            },
+            exit(code) {
+                exitCode = code;
+                events.exit.done();
+            },
+            get exitCode() {
+                return exitCode;
+            },
+            result,
+        };
+    }
+    function configureTimeout(flag, event, timeout) {
+        if (flag === false) {
+            return;
+        }
+        (flag === true ? event.promise : event.promise.then(() => utils_1.delay(flag))).then(timeout.done);
+    }
+    return {
+        type: 'spawn.after',
+        action(_data, { spawned, close }) {
+            var _a, _b;
+            return __awaiter(this, void 0, void 0, function* () {
+                const events = createEvents();
+                let deferClose = true;
+                let quickClose = () => void (deferClose = false);
+                (_a = spawned.stdout) === null || _a === void 0 ? void 0 : _a.on('data', quickClose);
+                (_b = spawned.stderr) === null || _b === void 0 ? void 0 : _b.on('data', quickClose);
+                spawned.on('error', quickClose);
+                spawned.on('close', (code) => events.close(code));
+                spawned.on('exit', (code) => events.exit(code));
+                try {
+                    yield events.result;
+                    if (deferClose) {
+                        yield utils_1.delay(50);
+                    }
+                    close(events.exitCode);
+                }
+                catch (err) {
+                    close(events.exitCode, err);
+                }
+            });
+        }
+    };
+}
+exports.completionDetectionPlugin = completionDetectionPlugin;
+//# sourceMappingURL=completion-detection.plugin.js.map
+
+/***/ }),
+
+/***/ 6713:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.errorDetectionPlugin = exports.errorDetectionHandler = void 0;
+const git_error_1 = __nccwpck_require__(5757);
+function isTaskError(result) {
+    return !!(result.exitCode && result.stdErr.length);
+}
+function getErrorMessage(result) {
+    return Buffer.concat([...result.stdOut, ...result.stdErr]);
+}
+function errorDetectionHandler(overwrite = false, isError = isTaskError, errorMessage = getErrorMessage) {
+    return (error, result) => {
+        if ((!overwrite && error) || !isError(result)) {
+            return error;
+        }
+        return errorMessage(result);
+    };
+}
+exports.errorDetectionHandler = errorDetectionHandler;
+function errorDetectionPlugin(config) {
+    return {
+        type: 'task.error',
+        action(data, context) {
+            const error = config(data.error, {
+                stdErr: context.stdErr,
+                stdOut: context.stdOut,
+                exitCode: context.exitCode
+            });
+            if (Buffer.isBuffer(error)) {
+                return { error: new git_error_1.GitError(undefined, error.toString('utf-8')) };
+            }
+            return {
+                error
+            };
+        },
+    };
+}
+exports.errorDetectionPlugin = errorDetectionPlugin;
+//# sourceMappingURL=error-detection.plugin.js.map
+
+/***/ }),
+
+/***/ 8078:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __exportStar = (this && this.__exportStar) || function(m, exports) {
+    for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+__exportStar(__nccwpck_require__(2581), exports);
+__exportStar(__nccwpck_require__(179), exports);
+__exportStar(__nccwpck_require__(6713), exports);
+__exportStar(__nccwpck_require__(5067), exports);
+__exportStar(__nccwpck_require__(1738), exports);
+__exportStar(__nccwpck_require__(8436), exports);
+__exportStar(__nccwpck_require__(9109), exports);
+__exportStar(__nccwpck_require__(9504), exports);
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ 5067:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.PluginStore = void 0;
+const utils_1 = __nccwpck_require__(847);
+class PluginStore {
+    constructor() {
+        this.plugins = new Set();
+    }
+    add(plugin) {
+        const plugins = [];
+        utils_1.asArray(plugin).forEach(plugin => plugin && this.plugins.add(utils_1.append(plugins, plugin)));
+        return () => {
+            plugins.forEach(plugin => this.plugins.delete(plugin));
+        };
+    }
+    exec(type, data, context) {
+        let output = data;
+        const contextual = Object.freeze(Object.create(context));
+        for (const plugin of this.plugins) {
+            if (plugin.type === type) {
+                output = plugin.action(output, contextual);
+            }
+        }
+        return output;
+    }
+}
+exports.PluginStore = PluginStore;
+//# sourceMappingURL=plugin-store.js.map
+
+/***/ }),
+
+/***/ 1738:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.progressMonitorPlugin = void 0;
+const utils_1 = __nccwpck_require__(847);
+function progressMonitorPlugin(progress) {
+    const progressCommand = '--progress';
+    const progressMethods = ['checkout', 'clone', 'fetch', 'pull', 'push'];
+    const onProgress = {
+        type: 'spawn.after',
+        action(_data, context) {
+            var _a;
+            if (!context.commands.includes(progressCommand)) {
+                return;
+            }
+            (_a = context.spawned.stderr) === null || _a === void 0 ? void 0 : _a.on('data', (chunk) => {
+                const message = /^([\s\S]+?):\s*(\d+)% \((\d+)\/(\d+)\)/.exec(chunk.toString('utf8'));
+                if (!message) {
+                    return;
+                }
+                progress({
+                    method: context.method,
+                    stage: progressEventStage(message[1]),
+                    progress: utils_1.asNumber(message[2]),
+                    processed: utils_1.asNumber(message[3]),
+                    total: utils_1.asNumber(message[4]),
+                });
+            });
+        }
+    };
+    const onArgs = {
+        type: 'spawn.args',
+        action(args, context) {
+            if (!progressMethods.includes(context.method)) {
+                return args;
+            }
+            return utils_1.including(args, progressCommand);
+        }
+    };
+    return [onArgs, onProgress];
+}
+exports.progressMonitorPlugin = progressMonitorPlugin;
+function progressEventStage(input) {
+    return String(input.toLowerCase().split(' ', 1)) || 'unknown';
+}
+//# sourceMappingURL=progress-monitor-plugin.js.map
+
+/***/ }),
+
+/***/ 8436:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+//# sourceMappingURL=simple-git-plugin.js.map
+
+/***/ }),
+
+/***/ 9109:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.spawnOptionsPlugin = void 0;
+const utils_1 = __nccwpck_require__(847);
+function spawnOptionsPlugin(spawnOptions) {
+    const options = utils_1.pick(spawnOptions, ['uid', 'gid']);
+    return {
+        type: 'spawn.options',
+        action(data) {
+            return Object.assign(Object.assign({}, options), data);
+        },
+    };
+}
+exports.spawnOptionsPlugin = spawnOptionsPlugin;
+//# sourceMappingURL=spawn-options-plugin.js.map
+
+/***/ }),
+
+/***/ 9504:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.timeoutPlugin = void 0;
+const git_plugin_error_1 = __nccwpck_require__(19);
+function timeoutPlugin({ block }) {
+    if (block > 0) {
+        return {
+            type: 'spawn.after',
+            action(_data, context) {
+                var _a, _b;
+                let timeout;
+                function wait() {
+                    timeout && clearTimeout(timeout);
+                    timeout = setTimeout(kill, block);
+                }
+                function stop() {
+                    var _a, _b;
+                    (_a = context.spawned.stdout) === null || _a === void 0 ? void 0 : _a.off('data', wait);
+                    (_b = context.spawned.stderr) === null || _b === void 0 ? void 0 : _b.off('data', wait);
+                    context.spawned.off('exit', stop);
+                    context.spawned.off('close', stop);
+                }
+                function kill() {
+                    stop();
+                    context.kill(new git_plugin_error_1.GitPluginError(undefined, 'timeout', `block timeout reached`));
+                }
+                (_a = context.spawned.stdout) === null || _a === void 0 ? void 0 : _a.on('data', wait);
+                (_b = context.spawned.stderr) === null || _b === void 0 ? void 0 : _b.on('data', wait);
+                context.spawned.on('exit', stop);
+                context.spawned.on('close', stop);
+                wait();
+            }
+        };
+    }
+}
+exports.timeoutPlugin = timeoutPlugin;
+//# sourceMappingURL=timout-plugin.js.map
 
 /***/ }),
 
@@ -4448,13 +5875,13 @@ exports.parseCheckIgnore = parseCheckIgnore;
 /***/ }),
 
 /***/ 5689:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.cleanSummaryParser = exports.CleanResponse = void 0;
-const utils_1 = __webpack_require__(847);
+const utils_1 = __nccwpck_require__(847);
 class CleanResponse {
     constructor(dryRun) {
         this.dryRun = dryRun;
@@ -4483,13 +5910,13 @@ exports.cleanSummaryParser = cleanSummaryParser;
 /***/ }),
 
 /***/ 7219:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.configListParser = exports.ConfigList = void 0;
-const utils_1 = __webpack_require__(847);
+exports.configGetParser = exports.configListParser = exports.ConfigList = void 0;
+const utils_1 = __nccwpck_require__(847);
 class ConfigList {
     constructor() {
         this.files = [];
@@ -4528,17 +5955,51 @@ class ConfigList {
 exports.ConfigList = ConfigList;
 function configListParser(text) {
     const config = new ConfigList();
-    const lines = text.split('\0');
-    for (let i = 0, max = lines.length - 1; i < max;) {
-        const file = configFilePath(lines[i++]);
-        const [key, value] = utils_1.splitOn(lines[i++], '\n');
-        config.addValue(file, key, value);
+    for (const item of configParser(text)) {
+        config.addValue(item.file, String(item.key), item.value);
     }
     return config;
 }
 exports.configListParser = configListParser;
+function configGetParser(text, key) {
+    let value = null;
+    const values = [];
+    const scopes = new Map();
+    for (const item of configParser(text, key)) {
+        if (item.key !== key) {
+            continue;
+        }
+        values.push(value = item.value);
+        if (!scopes.has(item.file)) {
+            scopes.set(item.file, []);
+        }
+        scopes.get(item.file).push(value);
+    }
+    return {
+        key,
+        paths: Array.from(scopes.keys()),
+        scopes,
+        value,
+        values
+    };
+}
+exports.configGetParser = configGetParser;
 function configFilePath(filePath) {
     return filePath.replace(/^(file):/, '');
+}
+function* configParser(text, requestedKey = null) {
+    const lines = text.split('\0');
+    for (let i = 0, max = lines.length - 1; i < max;) {
+        const file = configFilePath(lines[i++]);
+        let value = lines[i++];
+        let key = requestedKey;
+        if (value.includes('\n')) {
+            const line = utils_1.splitOn(value, '\n');
+            key = line[0];
+            value = line[1];
+        }
+        yield { file, key, value };
+    }
 }
 //# sourceMappingURL=ConfigList.js.map
 
@@ -4593,13 +6054,13 @@ exports.FileStatusSummary = FileStatusSummary;
 /***/ }),
 
 /***/ 9999:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseGetRemotesVerbose = exports.parseGetRemotes = void 0;
-const utils_1 = __webpack_require__(847);
+const utils_1 = __nccwpck_require__(847);
 function parseGetRemotes(text) {
     const remotes = {};
     forEach(text, ([name]) => remotes[name] = { name });
@@ -4744,17 +6205,14 @@ exports.PullSummary = PullSummary;
 /***/ }),
 
 /***/ 6790:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseStatusSummary = exports.StatusSummary = void 0;
-const utils_1 = __webpack_require__(847);
-const FileStatusSummary_1 = __webpack_require__(860);
-/**
- * The StatusSummary is returned as a response to getting `git().status()`
- */
+const utils_1 = __nccwpck_require__(847);
+const FileStatusSummary_1 = __nccwpck_require__(860);
 class StatusSummary {
     constructor() {
         this.not_added = [];
@@ -4763,32 +6221,14 @@ class StatusSummary {
         this.deleted = [];
         this.modified = [];
         this.renamed = [];
-        /**
-         * All files represented as an array of objects containing the `path` and status in `index` and
-         * in the `working_dir`.
-         */
         this.files = [];
         this.staged = [];
-        /**
-         * Number of commits ahead of the tracked branch
-         */
         this.ahead = 0;
-        /**
-         *Number of commits behind the tracked branch
-         */
         this.behind = 0;
-        /**
-         * Name of the current branch
-         */
         this.current = null;
-        /**
-         * Name of the branch being tracked
-         */
         this.tracking = null;
+        this.detached = false;
     }
-    /**
-     * Gets whether this StatusSummary represents a clean working branch.
-     */
     isClean() {
         return !this.files.length;
     }
@@ -4862,6 +6302,7 @@ const parsers = new Map([
             result.tracking = regexResult && regexResult[1];
             regexResult = onEmptyBranchReg.exec(line);
             result.current = regexResult && regexResult[1] || result.current;
+            result.detached = /\(no branch\)/.test(line);
         }]
 ]);
 const parseStatusSummary = function (text) {
@@ -4962,7 +6403,7 @@ function toNumber(input) {
 /***/ }),
 
 /***/ 8543:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -4977,29 +6418,36 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GitExecutorChain = void 0;
-const child_process_1 = __webpack_require__(3129);
-const api_1 = __webpack_require__(4732);
-const task_1 = __webpack_require__(2815);
-const tasks_pending_queue_1 = __webpack_require__(6676);
-const utils_1 = __webpack_require__(847);
+const child_process_1 = __nccwpck_require__(3129);
+const git_error_1 = __nccwpck_require__(5757);
+const task_1 = __nccwpck_require__(2815);
+const utils_1 = __nccwpck_require__(847);
+const tasks_pending_queue_1 = __nccwpck_require__(6676);
 class GitExecutorChain {
-    constructor(_executor, _scheduler) {
+    constructor(_executor, _scheduler, _plugins) {
         this._executor = _executor;
         this._scheduler = _scheduler;
+        this._plugins = _plugins;
         this._chain = Promise.resolve();
         this._queue = new tasks_pending_queue_1.TasksPendingQueue();
     }
     get binary() {
         return this._executor.binary;
     }
-    get outputHandler() {
-        return this._executor.outputHandler;
-    }
     get cwd() {
-        return this._executor.cwd;
+        return this._cwd || this._executor.cwd;
+    }
+    set cwd(cwd) {
+        this._cwd = cwd;
     }
     get env() {
         return this._executor.env;
+    }
+    get outputHandler() {
+        return this._executor.outputHandler;
+    }
+    chain() {
+        return this;
     }
     push(task) {
         this._queue.push(task);
@@ -5025,15 +6473,16 @@ class GitExecutorChain {
         });
     }
     onFatalException(task, e) {
-        const gitError = (e instanceof api_1.GitError) ? Object.assign(e, { task }) : new api_1.GitError(task, e && String(e));
+        const gitError = (e instanceof git_error_1.GitError) ? Object.assign(e, { task }) : new git_error_1.GitError(task, e && String(e));
         this._chain = Promise.resolve();
         this._queue.fatal(gitError);
         return gitError;
     }
     attemptRemoteTask(task, logger) {
         return __awaiter(this, void 0, void 0, function* () {
-            const raw = yield this.gitResponse(this.binary, task.commands, this.outputHandler, logger.step('SPAWN'));
-            const outputStreams = yield this.handleTaskData(task, raw, logger.step('HANDLE'));
+            const args = this._plugins.exec('spawn.args', [...task.commands], pluginContext(task, task.commands));
+            const raw = yield this.gitResponse(task, this.binary, args, this.outputHandler, logger.step('SPAWN'));
+            const outputStreams = yield this.handleTaskData(task, args, raw, logger.step('HANDLE'));
             logger(`passing response to task's parser as a %s`, task.format);
             if (task_1.isBufferTask(task)) {
                 return utils_1.callTaskParser(task.parser, outputStreams);
@@ -5044,82 +6493,78 @@ class GitExecutorChain {
     attemptEmptyTask(task, logger) {
         return __awaiter(this, void 0, void 0, function* () {
             logger(`empty task bypassing child process to call to task's parser`);
-            return task.parser();
+            return task.parser(this);
         });
     }
-    handleTaskData({ onError, concatStdErr }, { exitCode, stdOut, stdErr }, logger) {
+    handleTaskData(task, args, result, logger) {
+        const { exitCode, rejection, stdOut, stdErr } = result;
         return new Promise((done, fail) => {
             logger(`Preparing to handle process response exitCode=%d stdOut=`, exitCode);
-            if (exitCode && stdErr.length && onError) {
+            const { error } = this._plugins.exec('task.error', { error: rejection }, Object.assign(Object.assign({}, pluginContext(task, args)), result));
+            if (error && task.onError) {
                 logger.info(`exitCode=%s handling with custom error handler`);
-                logger(`concatenate stdErr to stdOut: %j`, concatStdErr);
-                return onError(exitCode, Buffer.concat([...(concatStdErr ? stdOut : []), ...stdErr]).toString('utf-8'), (result) => {
+                return task.onError(result, error, (newStdOut) => {
                     logger.info(`custom error handler treated as success`);
-                    logger(`custom error returned a %s`, utils_1.objectToString(result));
-                    done(new utils_1.GitOutputStreams(Buffer.isBuffer(result) ? result : Buffer.from(String(result)), Buffer.concat(stdErr)));
+                    logger(`custom error returned a %s`, utils_1.objectToString(newStdOut));
+                    done(new utils_1.GitOutputStreams(Array.isArray(newStdOut) ? Buffer.concat(newStdOut) : newStdOut, Buffer.concat(stdErr)));
                 }, fail);
             }
-            if (exitCode && stdErr.length) {
-                logger.info(`exitCode=%s treated as error when then child process has written to stdErr`);
-                return fail(Buffer.concat(stdErr).toString('utf-8'));
-            }
-            if (concatStdErr) {
-                logger(`concatenating stdErr onto stdOut before processing`);
-                logger(`stdErr: $O`, stdErr);
-                stdOut.push(...stdErr);
+            if (error) {
+                logger.info(`handling as error: exitCode=%s stdErr=%s rejection=%o`, exitCode, stdErr.length, rejection);
+                return fail(error);
             }
             logger.info(`retrieving task output complete`);
             done(new utils_1.GitOutputStreams(Buffer.concat(stdOut), Buffer.concat(stdErr)));
         });
     }
-    gitResponse(command, args, outputHandler, logger) {
+    gitResponse(task, command, args, outputHandler, logger) {
         return __awaiter(this, void 0, void 0, function* () {
             const outputLogger = logger.sibling('output');
-            const spawnOptions = {
+            const spawnOptions = this._plugins.exec('spawn.options', {
                 cwd: this.cwd,
                 env: this.env,
                 windowsHide: true,
-            };
+            }, pluginContext(task, task.commands));
             return new Promise((done) => {
                 const stdOut = [];
                 const stdErr = [];
-                let attempted = false;
-                function attemptClose(exitCode, event = 'retry') {
-                    // closing when there is content, terminate immediately
-                    if (attempted || stdErr.length || stdOut.length) {
-                        logger.info(`exitCode=%s event=%s`, exitCode, event);
-                        done({
-                            stdOut,
-                            stdErr,
-                            exitCode,
-                        });
-                        attempted = true;
-                        outputLogger.destroy();
-                    }
-                    // first attempt at closing but no content yet, wait briefly for the close/exit that may follow
-                    if (!attempted) {
-                        attempted = true;
-                        setTimeout(() => attemptClose(exitCode, 'deferred'), 50);
-                        logger('received %s event before content on stdOut/stdErr', event);
-                    }
-                }
+                let rejection;
                 logger.info(`%s %o`, command, args);
                 logger('%O', spawnOptions);
                 const spawned = child_process_1.spawn(command, args, spawnOptions);
                 spawned.stdout.on('data', onDataReceived(stdOut, 'stdOut', logger, outputLogger.step('stdOut')));
                 spawned.stderr.on('data', onDataReceived(stdErr, 'stdErr', logger, outputLogger.step('stdErr')));
                 spawned.on('error', onErrorReceived(stdErr, logger));
-                spawned.on('close', (code) => attemptClose(code, 'close'));
-                spawned.on('exit', (code) => attemptClose(code, 'exit'));
                 if (outputHandler) {
                     logger(`Passing child process stdOut/stdErr to custom outputHandler`);
                     outputHandler(command, spawned.stdout, spawned.stderr, [...args]);
                 }
+                this._plugins.exec('spawn.after', undefined, Object.assign(Object.assign({}, pluginContext(task, args)), { spawned, close(exitCode, reason) {
+                        done({
+                            stdOut,
+                            stdErr,
+                            exitCode,
+                            rejection: rejection || reason,
+                        });
+                    },
+                    kill(reason) {
+                        if (spawned.killed) {
+                            return;
+                        }
+                        rejection = reason;
+                        spawned.kill('SIGINT');
+                    } }));
             });
         });
     }
 }
 exports.GitExecutorChain = GitExecutorChain;
+function pluginContext(task, commands) {
+    return {
+        method: utils_1.first(task.commands) || '',
+        commands,
+    };
+}
 function onErrorReceived(target, logger) {
     return (err) => {
         logger(`[ERROR] child process exception %o`, err);
@@ -5138,22 +6583,23 @@ function onDataReceived(target, name, logger, output) {
 /***/ }),
 
 /***/ 4701:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.GitExecutor = void 0;
-const git_executor_chain_1 = __webpack_require__(8543);
+const git_executor_chain_1 = __nccwpck_require__(8543);
 class GitExecutor {
-    constructor(binary = 'git', cwd, _scheduler) {
+    constructor(binary = 'git', cwd, _scheduler, _plugins) {
         this.binary = binary;
         this.cwd = cwd;
         this._scheduler = _scheduler;
-        this._chain = new git_executor_chain_1.GitExecutorChain(this, this._scheduler);
+        this._plugins = _plugins;
+        this._chain = new git_executor_chain_1.GitExecutorChain(this, this._scheduler, this._plugins);
     }
     chain() {
-        return new git_executor_chain_1.GitExecutorChain(this, this._scheduler);
+        return new git_executor_chain_1.GitExecutorChain(this, this._scheduler, this._plugins);
     }
     push(task) {
         return this._chain.push(task);
@@ -5165,13 +6611,14 @@ exports.GitExecutor = GitExecutor;
 /***/ }),
 
 /***/ 941:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.gitP = void 0;
-const git_response_error_1 = __webpack_require__(5131);
+const git_response_error_1 = __nccwpck_require__(5131);
+const git_factory_1 = __nccwpck_require__(9846);
 const functionNamesBuilderApi = [
     'customBinary', 'env', 'outputHandler', 'silent',
 ];
@@ -5235,12 +6682,11 @@ const functionNamesPromiseApi = [
     'tags',
     'updateServerInfo'
 ];
-const { gitInstanceFactory } = __webpack_require__(1949);
 function gitP(...args) {
     let git;
     let chain = Promise.resolve();
     try {
-        git = gitInstanceFactory(...args);
+        git = git_factory_1.gitInstanceFactory(...args);
     }
     catch (e) {
         chain = Promise.reject(e);
@@ -5305,16 +6751,15 @@ function toError(error) {
 /***/ }),
 
 /***/ 3421:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.Scheduler = void 0;
-const utils_1 = __webpack_require__(847);
-const promise_deferred_1 = __webpack_require__(9819);
-const git_logger_1 = __webpack_require__(7178);
-const logger = git_logger_1.createLogger('', 'scheduler');
+const utils_1 = __nccwpck_require__(847);
+const promise_deferred_1 = __nccwpck_require__(9819);
+const git_logger_1 = __nccwpck_require__(7178);
 const createScheduledTask = (() => {
     let id = 0;
     return () => {
@@ -5330,26 +6775,27 @@ const createScheduledTask = (() => {
 class Scheduler {
     constructor(concurrency = 2) {
         this.concurrency = concurrency;
+        this.logger = git_logger_1.createLogger('', 'scheduler');
         this.pending = [];
         this.running = [];
-        logger(`Constructed, concurrency=%s`, concurrency);
+        this.logger(`Constructed, concurrency=%s`, concurrency);
     }
     schedule() {
         if (!this.pending.length || this.running.length >= this.concurrency) {
-            logger(`Schedule attempt ignored, pending=%s running=%s concurrency=%s`, this.pending.length, this.running.length, this.concurrency);
+            this.logger(`Schedule attempt ignored, pending=%s running=%s concurrency=%s`, this.pending.length, this.running.length, this.concurrency);
             return;
         }
         const task = utils_1.append(this.running, this.pending.shift());
-        logger(`Attempting id=%s`, task.id);
+        this.logger(`Attempting id=%s`, task.id);
         task.done(() => {
-            logger(`Completing id=`, task.id);
+            this.logger(`Completing id=`, task.id);
             utils_1.remove(this.running, task);
             this.schedule();
         });
     }
     next() {
         const { promise, id } = utils_1.append(this.pending, createScheduledTask());
-        logger(`Scheduling id=%s`, id);
+        this.logger(`Scheduling id=%s`, id);
         this.schedule();
         return promise;
     }
@@ -5360,14 +6806,14 @@ exports.Scheduler = Scheduler;
 /***/ }),
 
 /***/ 6676:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.TasksPendingQueue = void 0;
-const git_logger_1 = __webpack_require__(7178);
-const api_1 = __webpack_require__(4732);
+const git_error_1 = __nccwpck_require__(5757);
+const git_logger_1 = __nccwpck_require__(7178);
 class TasksPendingQueue {
     constructor(logLabel = 'GitExecutor') {
         this.logLabel = logLabel;
@@ -5409,14 +6855,13 @@ class TasksPendingQueue {
     complete(task) {
         const progress = this.withProgress(task);
         if (progress) {
-            progress.logger.destroy();
             this._queue.delete(task);
         }
     }
     attempt(task) {
         const progress = this.withProgress(task);
         if (!progress) {
-            throw new api_1.GitError(undefined, 'TasksPendingQueue: attempt called for an unknown task');
+            throw new git_error_1.GitError(undefined, 'TasksPendingQueue: attempt called for an unknown task');
         }
         progress.logger('Starting task');
         return progress;
@@ -5431,25 +6876,109 @@ TasksPendingQueue.counter = 0;
 
 /***/ }),
 
+/***/ 999:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.SimpleGitApi = void 0;
+const task_callback_1 = __nccwpck_require__(8850);
+const change_working_directory_1 = __nccwpck_require__(4415);
+const config_1 = __nccwpck_require__(7597);
+const grep_1 = __nccwpck_require__(5524);
+const hash_object_1 = __nccwpck_require__(8199);
+const init_1 = __nccwpck_require__(6016);
+const log_1 = __nccwpck_require__(8627);
+const merge_1 = __nccwpck_require__(8829);
+const push_1 = __nccwpck_require__(1435);
+const status_1 = __nccwpck_require__(9197);
+const task_1 = __nccwpck_require__(2815);
+const utils_1 = __nccwpck_require__(847);
+class SimpleGitApi {
+    constructor(_executor) {
+        this._executor = _executor;
+    }
+    _runTask(task, then) {
+        const chain = this._executor.chain();
+        const promise = chain.push(task);
+        if (then) {
+            task_callback_1.taskCallback(task, promise, then);
+        }
+        return Object.create(this, {
+            then: { value: promise.then.bind(promise) },
+            catch: { value: promise.catch.bind(promise) },
+            _executor: { value: chain },
+        });
+    }
+    add(files) {
+        return this._runTask(task_1.straightThroughStringTask(['add', ...utils_1.asArray(files)]), utils_1.trailingFunctionArgument(arguments));
+    }
+    cwd(directory) {
+        const next = utils_1.trailingFunctionArgument(arguments);
+        if (typeof directory === 'string') {
+            return this._runTask(change_working_directory_1.changeWorkingDirectoryTask(directory, this._executor), next);
+        }
+        if (typeof (directory === null || directory === void 0 ? void 0 : directory.path) === 'string') {
+            return this._runTask(change_working_directory_1.changeWorkingDirectoryTask(directory.path, directory.root && this._executor || undefined), next);
+        }
+        return this._runTask(task_1.configurationErrorTask('Git.cwd: workingDirectory must be supplied as a string'), next);
+    }
+    hashObject(path, write) {
+        return this._runTask(hash_object_1.hashObjectTask(path, write === true), utils_1.trailingFunctionArgument(arguments));
+    }
+    init(bare) {
+        return this._runTask(init_1.initTask(bare === true, this._executor.cwd, utils_1.getTrailingOptions(arguments)), utils_1.trailingFunctionArgument(arguments));
+    }
+    merge() {
+        return this._runTask(merge_1.mergeTask(utils_1.getTrailingOptions(arguments)), utils_1.trailingFunctionArgument(arguments));
+    }
+    mergeFromTo(remote, branch) {
+        if (!(utils_1.filterString(remote) && utils_1.filterString(branch))) {
+            return this._runTask(task_1.configurationErrorTask(`Git.mergeFromTo requires that the 'remote' and 'branch' arguments are supplied as strings`));
+        }
+        return this._runTask(merge_1.mergeTask([remote, branch, ...utils_1.getTrailingOptions(arguments)]), utils_1.trailingFunctionArgument(arguments, false));
+    }
+    outputHandler(handler) {
+        this._executor.outputHandler = handler;
+        return this;
+    }
+    push() {
+        const task = push_1.pushTask({
+            remote: utils_1.filterType(arguments[0], utils_1.filterString),
+            branch: utils_1.filterType(arguments[1], utils_1.filterString),
+        }, utils_1.getTrailingOptions(arguments));
+        return this._runTask(task, utils_1.trailingFunctionArgument(arguments));
+    }
+    stash() {
+        return this._runTask(task_1.straightThroughStringTask(['stash', ...utils_1.getTrailingOptions(arguments)]), utils_1.trailingFunctionArgument(arguments));
+    }
+    status() {
+        return this._runTask(status_1.statusTask(utils_1.getTrailingOptions(arguments)), utils_1.trailingFunctionArgument(arguments));
+    }
+}
+exports.SimpleGitApi = SimpleGitApi;
+Object.assign(SimpleGitApi.prototype, config_1.default(), grep_1.default(), log_1.default());
+//# sourceMappingURL=simple-git-api.js.map
+
+/***/ }),
+
 /***/ 8850:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.taskCallback = void 0;
-const api_1 = __webpack_require__(4732);
-const utils_1 = __webpack_require__(847);
+const git_response_error_1 = __nccwpck_require__(5131);
+const utils_1 = __nccwpck_require__(847);
 function taskCallback(task, response, callback = utils_1.NOOP) {
     const onSuccess = (data) => {
         callback(null, data);
     };
     const onError = (err) => {
         if ((err === null || err === void 0 ? void 0 : err.task) === task) {
-            if (err instanceof api_1.GitResponseError) {
-                return callback(addDeprecationNoticeToError(err));
-            }
-            callback(err);
+            callback((err instanceof git_response_error_1.GitResponseError) ? addDeprecationNoticeToError(err) : err, undefined);
         }
     };
     response.then(onSuccess, onError);
@@ -5481,13 +7010,13 @@ function addDeprecationNoticeToError(err) {
 /***/ }),
 
 /***/ 4931:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.applyPatchTask = void 0;
-const task_1 = __webpack_require__(2815);
+const task_1 = __nccwpck_require__(2815);
 function applyPatchTask(patches, customArgs) {
     return task_1.straightThroughStringTask(['apply', ...customArgs, ...patches]);
 }
@@ -5497,15 +7026,16 @@ exports.applyPatchTask = applyPatchTask;
 /***/ }),
 
 /***/ 17:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.deleteBranchTask = exports.deleteBranchesTask = exports.branchLocalTask = exports.branchTask = exports.containsDeleteBranchCommand = void 0;
-const git_response_error_1 = __webpack_require__(5131);
-const parse_branch_delete_1 = __webpack_require__(6086);
-const parse_branch_1 = __webpack_require__(9264);
+const git_response_error_1 = __nccwpck_require__(5131);
+const parse_branch_delete_1 = __nccwpck_require__(6086);
+const parse_branch_1 = __nccwpck_require__(9264);
+const utils_1 = __nccwpck_require__(847);
 function containsDeleteBranchCommand(commands) {
     const deleteCommands = ['-d', '-D', '--delete'];
     return commands.some(command => deleteCommands.includes(command));
@@ -5548,13 +7078,12 @@ function deleteBranchesTask(branches, forceDelete = false) {
         parser(stdOut, stdErr) {
             return parse_branch_delete_1.parseBranchDeletions(stdOut, stdErr);
         },
-        onError(exitCode, error, done, fail) {
-            if (!parse_branch_delete_1.hasBranchDeletionError(error, exitCode)) {
+        onError({ exitCode, stdOut }, error, done, fail) {
+            if (!parse_branch_delete_1.hasBranchDeletionError(String(error), exitCode)) {
                 return fail(error);
             }
-            done(error);
+            done(stdOut);
         },
-        concatStdErr: true,
     };
 }
 exports.deleteBranchesTask = deleteBranchesTask;
@@ -5565,13 +7094,12 @@ function deleteBranchTask(branch, forceDelete = false) {
         parser(stdOut, stdErr) {
             return parse_branch_delete_1.parseBranchDeletions(stdOut, stdErr).branches[branch];
         },
-        onError(exitCode, error, _, fail) {
-            if (!parse_branch_delete_1.hasBranchDeletionError(error, exitCode)) {
+        onError({ exitCode, stdErr, stdOut }, error, _, fail) {
+            if (!parse_branch_delete_1.hasBranchDeletionError(String(error), exitCode)) {
                 return fail(error);
             }
-            throw new git_response_error_1.GitResponseError(task.parser(error, ''), error);
+            throw new git_response_error_1.GitResponseError(task.parser(utils_1.bufferToString(stdOut), utils_1.bufferToString(stdErr)), String(error));
         },
-        concatStdErr: true,
     };
     return task;
 }
@@ -5580,25 +7108,67 @@ exports.deleteBranchTask = deleteBranchTask;
 
 /***/ }),
 
+/***/ 4415:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.changeWorkingDirectoryTask = void 0;
+const utils_1 = __nccwpck_require__(847);
+const task_1 = __nccwpck_require__(2815);
+function changeWorkingDirectoryTask(directory, root) {
+    return task_1.adhocExecTask((instance) => {
+        if (!utils_1.folderExists(directory)) {
+            throw new Error(`Git.cwd: cannot change to non-directory "${directory}"`);
+        }
+        return ((root || instance).cwd = directory);
+    });
+}
+exports.changeWorkingDirectoryTask = changeWorkingDirectoryTask;
+//# sourceMappingURL=change-working-directory.js.map
+
+/***/ }),
+
+/***/ 3293:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.checkIgnoreTask = void 0;
+const CheckIgnore_1 = __nccwpck_require__(9926);
+function checkIgnoreTask(paths) {
+    return {
+        commands: ['check-ignore', ...paths],
+        format: 'utf-8',
+        parser: CheckIgnore_1.parseCheckIgnore,
+    };
+}
+exports.checkIgnoreTask = checkIgnoreTask;
+//# sourceMappingURL=check-ignore.js.map
+
+/***/ }),
+
 /***/ 221:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.checkIsBareRepoTask = exports.checkIsRepoRootTask = exports.checkIsRepoTask = exports.CheckRepoActions = void 0;
-const utils_1 = __webpack_require__(847);
+const utils_1 = __nccwpck_require__(847);
 var CheckRepoActions;
 (function (CheckRepoActions) {
     CheckRepoActions["BARE"] = "bare";
     CheckRepoActions["IN_TREE"] = "tree";
     CheckRepoActions["IS_REPO_ROOT"] = "root";
 })(CheckRepoActions = exports.CheckRepoActions || (exports.CheckRepoActions = {}));
-const onError = (exitCode, stdErr, done, fail) => {
-    if (exitCode === utils_1.ExitCodes.UNCLEAN && isNotRepoMessage(stdErr)) {
-        return done('false');
+const onError = ({ exitCode }, error, done, fail) => {
+    if (exitCode === utils_1.ExitCodes.UNCLEAN && isNotRepoMessage(error)) {
+        return done(Buffer.from('false'));
     }
-    fail(stdErr);
+    fail(error);
 };
 const parser = (text) => {
     return text.trim() === 'true';
@@ -5641,23 +7211,23 @@ function checkIsBareRepoTask() {
     };
 }
 exports.checkIsBareRepoTask = checkIsBareRepoTask;
-function isNotRepoMessage(message) {
-    return /(Not a git repository|Kein Git-Repository)/i.test(message);
+function isNotRepoMessage(error) {
+    return /(Not a git repository|Kein Git-Repository)/i.test(String(error));
 }
 //# sourceMappingURL=check-is-repo.js.map
 
 /***/ }),
 
 /***/ 4386:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.isCleanOptionsArray = exports.cleanTask = exports.cleanWithOptionsTask = exports.CleanOptions = exports.CONFIG_ERROR_UNKNOWN_OPTION = exports.CONFIG_ERROR_MODE_REQUIRED = exports.CONFIG_ERROR_INTERACTIVE_MODE = void 0;
-const CleanSummary_1 = __webpack_require__(5689);
-const utils_1 = __webpack_require__(847);
-const task_1 = __webpack_require__(2815);
+const CleanSummary_1 = __nccwpck_require__(5689);
+const utils_1 = __nccwpck_require__(847);
+const task_1 = __nccwpck_require__(2815);
 exports.CONFIG_ERROR_INTERACTIVE_MODE = 'Git clean interactive mode is not supported';
 exports.CONFIG_ERROR_MODE_REQUIRED = 'Git clean mode parameter ("n" or "f") is required';
 exports.CONFIG_ERROR_UNKNOWN_OPTION = 'Git clean unknown option found in: ';
@@ -5741,14 +7311,14 @@ function isInteractiveMode(option) {
 /***/ }),
 
 /***/ 3173:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.cloneMirrorTask = exports.cloneTask = void 0;
-const task_1 = __webpack_require__(2815);
-const utils_1 = __webpack_require__(847);
+const task_1 = __nccwpck_require__(2815);
+const utils_1 = __nccwpck_require__(847);
 function cloneTask(repo, directory, customArgs) {
     const commands = ['clone', ...customArgs];
     if (typeof repo === 'string') {
@@ -5770,13 +7340,13 @@ exports.cloneMirrorTask = cloneMirrorTask;
 /***/ }),
 
 /***/ 5494:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.commitTask = void 0;
-const parse_commit_1 = __webpack_require__(3026);
+const parse_commit_1 = __nccwpck_require__(3026);
 function commitTask(message, files, customArgs) {
     const commands = ['commit'];
     message.forEach((m) => commands.push('-m', m));
@@ -5793,15 +7363,29 @@ exports.commitTask = commitTask;
 /***/ }),
 
 /***/ 7597:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.listConfigTask = exports.addConfigTask = void 0;
-const ConfigList_1 = __webpack_require__(7219);
-function addConfigTask(key, value, append = false) {
-    const commands = ['config', '--local'];
+exports.GitConfigScope = void 0;
+const ConfigList_1 = __nccwpck_require__(7219);
+const utils_1 = __nccwpck_require__(847);
+var GitConfigScope;
+(function (GitConfigScope) {
+    GitConfigScope["system"] = "system";
+    GitConfigScope["global"] = "global";
+    GitConfigScope["local"] = "local";
+    GitConfigScope["worktree"] = "worktree";
+})(GitConfigScope = exports.GitConfigScope || (exports.GitConfigScope = {}));
+function asConfigScope(scope, fallback) {
+    if (typeof scope === 'string' && GitConfigScope.hasOwnProperty(scope)) {
+        return scope;
+    }
+    return fallback;
+}
+function addConfigTask(key, value, append, scope) {
+    const commands = ['config', `--${scope}`];
     if (append) {
         commands.push('--add');
     }
@@ -5814,29 +7398,58 @@ function addConfigTask(key, value, append = false) {
         }
     };
 }
-exports.addConfigTask = addConfigTask;
-function listConfigTask() {
+function getConfigTask(key, scope) {
+    const commands = ['config', '--null', '--show-origin', '--get-all', key];
+    if (scope) {
+        commands.splice(1, 0, `--${scope}`);
+    }
     return {
-        commands: ['config', '--list', '--show-origin', '--null'],
+        commands,
+        format: 'utf-8',
+        parser(text) {
+            return ConfigList_1.configGetParser(text, key);
+        }
+    };
+}
+function listConfigTask(scope) {
+    const commands = ['config', '--list', '--show-origin', '--null'];
+    if (scope) {
+        commands.push(`--${scope}`);
+    }
+    return {
+        commands,
         format: 'utf-8',
         parser(text) {
             return ConfigList_1.configListParser(text);
         },
     };
 }
-exports.listConfigTask = listConfigTask;
+function default_1() {
+    return {
+        addConfig(key, value, ...rest) {
+            return this._runTask(addConfigTask(key, value, rest[0] === true, asConfigScope(rest[1], GitConfigScope.local)), utils_1.trailingFunctionArgument(arguments));
+        },
+        getConfig(key, scope) {
+            return this._runTask(getConfigTask(key, asConfigScope(scope, undefined)), utils_1.trailingFunctionArgument(arguments));
+        },
+        listConfig(...rest) {
+            return this._runTask(listConfigTask(asConfigScope(rest[0], undefined)), utils_1.trailingFunctionArgument(arguments));
+        },
+    };
+}
+exports.default = default_1;
 //# sourceMappingURL=config.js.map
 
 /***/ }),
 
 /***/ 9241:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.diffSummaryTask = void 0;
-const parse_diff_summary_1 = __webpack_require__(2024);
+const parse_diff_summary_1 = __nccwpck_require__(2024);
 function diffSummaryTask(customArgs) {
     return {
         commands: ['diff', '--stat=4096', ...customArgs],
@@ -5852,13 +7465,13 @@ exports.diffSummaryTask = diffSummaryTask;
 /***/ }),
 
 /***/ 8823:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.fetchTask = void 0;
-const parse_fetch_1 = __webpack_require__(6254);
+const parse_fetch_1 = __nccwpck_require__(6254);
 function fetchTask(remote, branch, customArgs) {
     const commands = ['fetch', ...customArgs];
     if (remote && branch) {
@@ -5875,14 +7488,97 @@ exports.fetchTask = fetchTask;
 
 /***/ }),
 
+/***/ 5524:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+var _a;
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.grepQueryBuilder = void 0;
+const utils_1 = __nccwpck_require__(847);
+const task_1 = __nccwpck_require__(2815);
+const disallowedOptions = ['-h'];
+const Query = Symbol('grepQuery');
+class GrepQuery {
+    constructor() {
+        this[_a] = [];
+    }
+    *[(_a = Query, Symbol.iterator)]() {
+        for (const query of this[Query]) {
+            yield query;
+        }
+    }
+    and(...and) {
+        and.length && this[Query].push('--and', '(', ...utils_1.prefixedArray(and, '-e'), ')');
+        return this;
+    }
+    param(...param) {
+        this[Query].push(...utils_1.prefixedArray(param, '-e'));
+        return this;
+    }
+}
+/**
+ * Creates a new builder for a `git.grep` query with optional params
+ */
+function grepQueryBuilder(...params) {
+    return new GrepQuery().param(...params);
+}
+exports.grepQueryBuilder = grepQueryBuilder;
+function parseGrep(grep) {
+    const paths = new Set();
+    const results = {};
+    utils_1.forEachLineWithContent(grep, (input) => {
+        const [path, line, preview] = input.split(utils_1.NULL);
+        paths.add(path);
+        (results[path] = results[path] || []).push({
+            line: utils_1.asNumber(line),
+            path,
+            preview,
+        });
+    });
+    return {
+        paths,
+        results,
+    };
+}
+function default_1() {
+    return {
+        grep(searchTerm) {
+            const then = utils_1.trailingFunctionArgument(arguments);
+            const options = utils_1.getTrailingOptions(arguments);
+            for (const option of disallowedOptions) {
+                if (options.includes(option)) {
+                    return this._runTask(task_1.configurationErrorTask(`git.grep: use of "${option}" is not supported.`), then);
+                }
+            }
+            if (typeof searchTerm === 'string') {
+                searchTerm = grepQueryBuilder().param(searchTerm);
+            }
+            const commands = ['grep', '--null', '-n', '--full-name', ...options, ...searchTerm];
+            return this._runTask({
+                commands,
+                format: 'utf-8',
+                parser(stdOut) {
+                    return parseGrep(stdOut);
+                },
+            }, then);
+        }
+    };
+}
+exports.default = default_1;
+//# sourceMappingURL=grep.js.map
+
+/***/ }),
+
 /***/ 8199:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.hashObjectTask = void 0;
-const task_1 = __webpack_require__(2815);
+const task_1 = __nccwpck_require__(2815);
 /**
  * Task used by `git.hashObject`
  */
@@ -5899,13 +7595,13 @@ exports.hashObjectTask = hashObjectTask;
 /***/ }),
 
 /***/ 6016:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.initTask = void 0;
-const InitSummary_1 = __webpack_require__(8690);
+const InitSummary_1 = __nccwpck_require__(8690);
 const bareCommand = '--bare';
 function hasBareCommand(command) {
     return command.includes(bareCommand);
@@ -5917,7 +7613,6 @@ function initTask(bare = false, path, customArgs) {
     }
     return {
         commands,
-        concatStdErr: false,
         format: 'utf-8',
         parser(text) {
             return InitSummary_1.parseInit(commands.includes('--bare'), path, text);
@@ -5930,14 +7625,15 @@ exports.initTask = initTask;
 /***/ }),
 
 /***/ 8627:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.logTask = exports.parseLogOptions = void 0;
-const parse_list_log_summary_1 = __webpack_require__(9729);
-const utils_1 = __webpack_require__(847);
+const parse_list_log_summary_1 = __nccwpck_require__(9729);
+const utils_1 = __nccwpck_require__(847);
+const task_1 = __nccwpck_require__(2815);
 var excludeOptions;
 (function (excludeOptions) {
     excludeOptions[excludeOptions["--pretty"] = 0] = "--pretty";
@@ -5950,8 +7646,9 @@ var excludeOptions;
     excludeOptions[excludeOptions["to"] = 7] = "to";
     excludeOptions[excludeOptions["splitter"] = 8] = "splitter";
     excludeOptions[excludeOptions["symmetric"] = 9] = "symmetric";
-    excludeOptions[excludeOptions["multiLine"] = 10] = "multiLine";
-    excludeOptions[excludeOptions["strictDate"] = 11] = "strictDate";
+    excludeOptions[excludeOptions["mailMap"] = 10] = "mailMap";
+    excludeOptions[excludeOptions["multiLine"] = 11] = "multiLine";
+    excludeOptions[excludeOptions["strictDate"] = 12] = "strictDate";
 })(excludeOptions || (excludeOptions = {}));
 function prettyFormat(format, splitter) {
     const fields = [];
@@ -5981,8 +7678,8 @@ function parseLogOptions(opt = {}, customArgs = []) {
         message: '%s',
         refs: '%D',
         body: opt.multiLine ? '%B' : '%b',
-        author_name: '%aN',
-        author_email: '%ae'
+        author_name: opt.mailMap !== false ? '%aN' : '%an',
+        author_email: opt.mailMap !== false ? '%aE' : '%ae'
     };
     const [fields, formatStr] = prettyFormat(format, splitter);
     const suffix = [];
@@ -6020,20 +7717,39 @@ function logTask(splitter, fields, customArgs) {
     };
 }
 exports.logTask = logTask;
+function default_1() {
+    return {
+        log(...rest) {
+            const next = utils_1.trailingFunctionArgument(arguments);
+            const task = rejectDeprecatedSignatures(...rest) ||
+                createLogTask(parseLogOptions(utils_1.trailingOptionsArgument(arguments), utils_1.filterType(arguments[0], utils_1.filterArray)));
+            return this._runTask(task, next);
+        }
+    };
+    function createLogTask(options) {
+        return logTask(options.splitter, options.fields, options.commands);
+    }
+    function rejectDeprecatedSignatures(from, to) {
+        return (utils_1.filterString(from) &&
+            utils_1.filterString(to) &&
+            task_1.configurationErrorTask(`git.log(string, string) should be replaced with git.log({ from: string, to: string })`));
+    }
+}
+exports.default = default_1;
 //# sourceMappingURL=log.js.map
 
 /***/ }),
 
 /***/ 8829:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.mergeTask = void 0;
-const api_1 = __webpack_require__(4732);
-const parse_merge_1 = __webpack_require__(6412);
-const task_1 = __webpack_require__(2815);
+const git_response_error_1 = __nccwpck_require__(5131);
+const parse_merge_1 = __nccwpck_require__(6412);
+const task_1 = __nccwpck_require__(2815);
 function mergeTask(customArgs) {
     if (!customArgs.length) {
         return task_1.configurationErrorTask('Git.merge requires at least one option');
@@ -6044,7 +7760,7 @@ function mergeTask(customArgs) {
         parser(stdOut, stdErr) {
             const merge = parse_merge_1.parseMergeResult(stdOut, stdErr);
             if (merge.failed) {
-                throw new api_1.GitResponseError(merge);
+                throw new git_response_error_1.GitResponseError(merge);
             }
             return merge;
         }
@@ -6056,14 +7772,14 @@ exports.mergeTask = mergeTask;
 /***/ }),
 
 /***/ 6520:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.moveTask = void 0;
-const parse_move_1 = __webpack_require__(7444);
-const utils_1 = __webpack_require__(847);
+const parse_move_1 = __nccwpck_require__(7444);
+const utils_1 = __nccwpck_require__(847);
 function moveTask(from, to) {
     return {
         commands: ['mv', '-v', ...utils_1.asArray(from), to],
@@ -6077,13 +7793,13 @@ exports.moveTask = moveTask;
 /***/ }),
 
 /***/ 4636:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.pullTask = void 0;
-const parse_pull_1 = __webpack_require__(5658);
+const parse_pull_1 = __nccwpck_require__(5658);
 function pullTask(remote, branch, customArgs) {
     const commands = ['pull', ...customArgs];
     if (remote && branch) {
@@ -6103,14 +7819,14 @@ exports.pullTask = pullTask;
 /***/ }),
 
 /***/ 1435:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.pushTask = exports.pushTagsTask = void 0;
-const parse_push_1 = __webpack_require__(8530);
-const utils_1 = __webpack_require__(847);
+const parse_push_1 = __nccwpck_require__(8530);
+const utils_1 = __nccwpck_require__(847);
 function pushTagsTask(ref = {}, customArgs) {
     utils_1.append(customArgs, '--tags');
     return pushTask(ref, customArgs);
@@ -6139,14 +7855,14 @@ exports.pushTask = pushTask;
 /***/ }),
 
 /***/ 9866:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.removeRemoteTask = exports.remoteTask = exports.listRemotesTask = exports.getRemotesTask = exports.addRemoteTask = void 0;
-const GetRemoteSummary_1 = __webpack_require__(9999);
-const task_1 = __webpack_require__(2815);
+const GetRemoteSummary_1 = __nccwpck_require__(9999);
+const task_1 = __nccwpck_require__(2815);
 function addRemoteTask(remoteName, remoteRepo, customArgs = []) {
     return task_1.straightThroughStringTask(['remote', 'add', ...customArgs, remoteName, remoteRepo]);
 }
@@ -6188,13 +7904,13 @@ exports.removeRemoteTask = removeRemoteTask;
 /***/ }),
 
 /***/ 2377:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getResetMode = exports.resetTask = exports.ResetMode = void 0;
-const task_1 = __webpack_require__(2815);
+const task_1 = __nccwpck_require__(2815);
 var ResetMode;
 (function (ResetMode) {
     ResetMode["MIXED"] = "mixed";
@@ -6233,14 +7949,14 @@ function isValidResetMode(mode) {
 /***/ }),
 
 /***/ 810:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.stashListTask = void 0;
-const parse_list_log_summary_1 = __webpack_require__(9729);
-const log_1 = __webpack_require__(8627);
+const parse_list_log_summary_1 = __nccwpck_require__(9729);
+const log_1 = __nccwpck_require__(8627);
 function stashListTask(opt = {}, customArgs) {
     const options = log_1.parseLogOptions(opt);
     const parser = parse_list_log_summary_1.createListLogSummaryParser(options.splitter, options.fields);
@@ -6256,13 +7972,13 @@ exports.stashListTask = stashListTask;
 /***/ }),
 
 /***/ 9197:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.statusTask = void 0;
-const StatusSummary_1 = __webpack_require__(6790);
+const StatusSummary_1 = __nccwpck_require__(6790);
 function statusTask(customArgs) {
     return {
         format: 'utf-8',
@@ -6278,13 +7994,13 @@ exports.statusTask = statusTask;
 /***/ }),
 
 /***/ 8772:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.updateSubModuleTask = exports.subModuleTask = exports.initSubModuleTask = exports.addSubModuleTask = void 0;
-const task_1 = __webpack_require__(2815);
+const task_1 = __nccwpck_require__(2815);
 function addSubModuleTask(repo, path) {
     return subModuleTask(['add', repo, path]);
 }
@@ -6310,13 +8026,13 @@ exports.updateSubModuleTask = updateSubModuleTask;
 /***/ }),
 
 /***/ 8540:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.addAnnotatedTagTask = exports.addTagTask = exports.tagListTask = void 0;
-const TagList_1 = __webpack_require__(4539);
+const TagList_1 = __nccwpck_require__(4539);
 /**
  * Task used by `git.tags`
  */
@@ -6362,18 +8078,18 @@ exports.addAnnotatedTagTask = addAnnotatedTagTask;
 /***/ }),
 
 /***/ 2815:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.isEmptyTask = exports.isBufferTask = exports.straightThroughStringTask = exports.configurationErrorTask = exports.adhocExecTask = exports.EMPTY_COMMANDS = void 0;
-const task_configuration_error_1 = __webpack_require__(740);
+exports.isEmptyTask = exports.isBufferTask = exports.straightThroughBufferTask = exports.straightThroughStringTask = exports.configurationErrorTask = exports.adhocExecTask = exports.EMPTY_COMMANDS = void 0;
+const task_configuration_error_1 = __nccwpck_require__(740);
 exports.EMPTY_COMMANDS = [];
 function adhocExecTask(parser) {
     return {
         commands: exports.EMPTY_COMMANDS,
-        format: 'utf-8',
+        format: 'empty',
         parser,
     };
 }
@@ -6381,7 +8097,7 @@ exports.adhocExecTask = adhocExecTask;
 function configurationErrorTask(error) {
     return {
         commands: exports.EMPTY_COMMANDS,
-        format: 'utf-8',
+        format: 'empty',
         parser() {
             throw typeof error === 'string' ? new task_configuration_error_1.TaskConfigurationError(error) : error;
         }
@@ -6398,12 +8114,22 @@ function straightThroughStringTask(commands, trimmed = false) {
     };
 }
 exports.straightThroughStringTask = straightThroughStringTask;
+function straightThroughBufferTask(commands) {
+    return {
+        commands,
+        format: 'buffer',
+        parser(buffer) {
+            return buffer;
+        },
+    };
+}
+exports.straightThroughBufferTask = straightThroughBufferTask;
 function isBufferTask(task) {
     return task.format === 'buffer';
 }
 exports.isBufferTask = isBufferTask;
 function isEmptyTask(task) {
-    return !task.commands.length;
+    return task.format === 'empty' || !task.commands.length;
 }
 exports.isEmptyTask = isEmptyTask;
 //# sourceMappingURL=task.js.map
@@ -6411,13 +8137,13 @@ exports.isEmptyTask = isEmptyTask;
 /***/ }),
 
 /***/ 7366:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.filterHasLength = exports.filterFunction = exports.filterPlainObject = exports.filterStringOrStringArray = exports.filterStringArray = exports.filterString = exports.filterPrimitives = exports.filterArray = exports.filterType = void 0;
-const util_1 = __webpack_require__(8237);
+const util_1 = __nccwpck_require__(8237);
 function filterType(input, filter, def) {
     if (filter(input)) {
         return input;
@@ -6507,7 +8233,7 @@ exports.GitOutputStreams = GitOutputStreams;
 /***/ }),
 
 /***/ 847:
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -6522,14 +8248,14 @@ var __exportStar = (this && this.__exportStar) || function(m, exports) {
     for (var p in m) if (p !== "default" && !Object.prototype.hasOwnProperty.call(exports, p)) __createBinding(exports, m, p);
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-__exportStar(__webpack_require__(7366), exports);
-__exportStar(__webpack_require__(2185), exports);
-__exportStar(__webpack_require__(6578), exports);
-__exportStar(__webpack_require__(9536), exports);
-__exportStar(__webpack_require__(5218), exports);
-__exportStar(__webpack_require__(3546), exports);
-__exportStar(__webpack_require__(1351), exports);
-__exportStar(__webpack_require__(8237), exports);
+__exportStar(__nccwpck_require__(7366), exports);
+__exportStar(__nccwpck_require__(2185), exports);
+__exportStar(__nccwpck_require__(6578), exports);
+__exportStar(__nccwpck_require__(9536), exports);
+__exportStar(__nccwpck_require__(5218), exports);
+__exportStar(__nccwpck_require__(3546), exports);
+__exportStar(__nccwpck_require__(1351), exports);
+__exportStar(__nccwpck_require__(8237), exports);
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -6603,6 +8329,7 @@ exports.createInstanceConfig = void 0;
 const defaultOptions = {
     binary: 'git',
     maxConcurrentProcesses: 5,
+    config: [],
 };
 function createInstanceConfig(...options) {
     const baseDir = process.cwd();
@@ -6616,14 +8343,14 @@ exports.createInstanceConfig = createInstanceConfig;
 /***/ }),
 
 /***/ 3546:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.trailingFunctionArgument = exports.trailingOptionsArgument = exports.getTrailingOptions = exports.appendTaskOptions = void 0;
-const argument_filters_1 = __webpack_require__(7366);
-const util_1 = __webpack_require__(8237);
+const argument_filters_1 = __nccwpck_require__(7366);
+const util_1 = __nccwpck_require__(8237);
 function appendTaskOptions(options, commands = []) {
     if (!argument_filters_1.filterPlainObject(options)) {
         return commands;
@@ -6681,13 +8408,13 @@ exports.trailingFunctionArgument = trailingFunctionArgument;
 /***/ }),
 
 /***/ 1351:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.parseStringResponse = exports.callTaskParser = void 0;
-const util_1 = __webpack_require__(8237);
+const util_1 = __nccwpck_require__(8237);
 function callTaskParser(parser, streams) {
     return parser(streams.stdOut, streams.stdErr);
 }
@@ -6712,13 +8439,14 @@ exports.parseStringResponse = parseStringResponse;
 /***/ }),
 
 /***/ 8237:
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.asNumber = exports.asStringArray = exports.asArray = exports.objectToString = exports.remove = exports.append = exports.folderExists = exports.forEachLineWithContent = exports.toLinesWithContent = exports.last = exports.first = exports.splitOn = exports.isUserFunction = exports.asFunction = exports.NOOP = void 0;
-const file_exists_1 = __webpack_require__(4751);
+exports.delay = exports.pick = exports.bufferToString = exports.prefixedArray = exports.asNumber = exports.asStringArray = exports.asArray = exports.objectToString = exports.remove = exports.including = exports.append = exports.folderExists = exports.forEachLineWithContent = exports.toLinesWithContent = exports.last = exports.first = exports.splitOn = exports.isUserFunction = exports.asFunction = exports.NOOP = exports.NULL = void 0;
+const file_exists_1 = __nccwpck_require__(4751);
+exports.NULL = '\0';
 const NOOP = () => {
 };
 exports.NOOP = NOOP;
@@ -6782,7 +8510,7 @@ function folderExists(path) {
 }
 exports.folderExists = folderExists;
 /**
- * Adds `item` into the `target` `Array` or `Set` when it is not already present.
+ * Adds `item` into the `target` `Array` or `Set` when it is not already present and returns the `item`.
  */
 function append(target, item) {
     if (Array.isArray(target)) {
@@ -6796,6 +8524,16 @@ function append(target, item) {
     return item;
 }
 exports.append = append;
+/**
+ * Adds `item` into the `target` `Array` when it is not already present and returns the `target`.
+ */
+function including(target, item) {
+    if (Array.isArray(target) && !target.includes(item)) {
+        target.push(item);
+    }
+    return target;
+}
+exports.including = including;
 function remove(target, item) {
     if (Array.isArray(target)) {
         const index = target.indexOf(item);
@@ -6826,17 +8564,40 @@ function asNumber(source, onNaN = 0) {
     return isNaN(num) ? onNaN : num;
 }
 exports.asNumber = asNumber;
+function prefixedArray(input, prefix) {
+    const output = [];
+    for (let i = 0, max = input.length; i < max; i++) {
+        output.push(prefix, input[i]);
+    }
+    return output;
+}
+exports.prefixedArray = prefixedArray;
+function bufferToString(input) {
+    return (Array.isArray(input) ? Buffer.concat(input) : input).toString('utf-8');
+}
+exports.bufferToString = bufferToString;
+/**
+ * Get a new object from a source object with only the listed properties.
+ */
+function pick(source, properties) {
+    return Object.assign({}, ...properties.map((property) => property in source ? { [property]: source[property] } : {}));
+}
+exports.pick = pick;
+function delay(duration = 0) {
+    return new Promise(done => setTimeout(done, duration));
+}
+exports.delay = delay;
 //# sourceMappingURL=util.js.map
 
 /***/ }),
 
 /***/ 9318:
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
 
 "use strict";
 
-const os = __webpack_require__(2087);
-const hasFlag = __webpack_require__(1621);
+const os = __nccwpck_require__(2087);
+const hasFlag = __nccwpck_require__(1621);
 
 const env = process.env;
 
@@ -6969,11 +8730,307 @@ module.exports = {
 
 /***/ }),
 
+/***/ 4294:
+/***/ ((module, __unused_webpack_exports, __nccwpck_require__) => {
+
+module.exports = __nccwpck_require__(4219);
+
+
+/***/ }),
+
+/***/ 4219:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+
+var net = __nccwpck_require__(1631);
+var tls = __nccwpck_require__(4016);
+var http = __nccwpck_require__(8605);
+var https = __nccwpck_require__(7211);
+var events = __nccwpck_require__(8614);
+var assert = __nccwpck_require__(2357);
+var util = __nccwpck_require__(1669);
+
+
+exports.httpOverHttp = httpOverHttp;
+exports.httpsOverHttp = httpsOverHttp;
+exports.httpOverHttps = httpOverHttps;
+exports.httpsOverHttps = httpsOverHttps;
+
+
+function httpOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  return agent;
+}
+
+function httpsOverHttp(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = http.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+function httpOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  return agent;
+}
+
+function httpsOverHttps(options) {
+  var agent = new TunnelingAgent(options);
+  agent.request = https.request;
+  agent.createSocket = createSecureSocket;
+  agent.defaultPort = 443;
+  return agent;
+}
+
+
+function TunnelingAgent(options) {
+  var self = this;
+  self.options = options || {};
+  self.proxyOptions = self.options.proxy || {};
+  self.maxSockets = self.options.maxSockets || http.Agent.defaultMaxSockets;
+  self.requests = [];
+  self.sockets = [];
+
+  self.on('free', function onFree(socket, host, port, localAddress) {
+    var options = toOptions(host, port, localAddress);
+    for (var i = 0, len = self.requests.length; i < len; ++i) {
+      var pending = self.requests[i];
+      if (pending.host === options.host && pending.port === options.port) {
+        // Detect the request to connect same origin server,
+        // reuse the connection.
+        self.requests.splice(i, 1);
+        pending.request.onSocket(socket);
+        return;
+      }
+    }
+    socket.destroy();
+    self.removeSocket(socket);
+  });
+}
+util.inherits(TunnelingAgent, events.EventEmitter);
+
+TunnelingAgent.prototype.addRequest = function addRequest(req, host, port, localAddress) {
+  var self = this;
+  var options = mergeOptions({request: req}, self.options, toOptions(host, port, localAddress));
+
+  if (self.sockets.length >= this.maxSockets) {
+    // We are over limit so we'll add it to the queue.
+    self.requests.push(options);
+    return;
+  }
+
+  // If we are under maxSockets create a new one.
+  self.createSocket(options, function(socket) {
+    socket.on('free', onFree);
+    socket.on('close', onCloseOrRemove);
+    socket.on('agentRemove', onCloseOrRemove);
+    req.onSocket(socket);
+
+    function onFree() {
+      self.emit('free', socket, options);
+    }
+
+    function onCloseOrRemove(err) {
+      self.removeSocket(socket);
+      socket.removeListener('free', onFree);
+      socket.removeListener('close', onCloseOrRemove);
+      socket.removeListener('agentRemove', onCloseOrRemove);
+    }
+  });
+};
+
+TunnelingAgent.prototype.createSocket = function createSocket(options, cb) {
+  var self = this;
+  var placeholder = {};
+  self.sockets.push(placeholder);
+
+  var connectOptions = mergeOptions({}, self.proxyOptions, {
+    method: 'CONNECT',
+    path: options.host + ':' + options.port,
+    agent: false,
+    headers: {
+      host: options.host + ':' + options.port
+    }
+  });
+  if (options.localAddress) {
+    connectOptions.localAddress = options.localAddress;
+  }
+  if (connectOptions.proxyAuth) {
+    connectOptions.headers = connectOptions.headers || {};
+    connectOptions.headers['Proxy-Authorization'] = 'Basic ' +
+        new Buffer(connectOptions.proxyAuth).toString('base64');
+  }
+
+  debug('making CONNECT request');
+  var connectReq = self.request(connectOptions);
+  connectReq.useChunkedEncodingByDefault = false; // for v0.6
+  connectReq.once('response', onResponse); // for v0.6
+  connectReq.once('upgrade', onUpgrade);   // for v0.6
+  connectReq.once('connect', onConnect);   // for v0.7 or later
+  connectReq.once('error', onError);
+  connectReq.end();
+
+  function onResponse(res) {
+    // Very hacky. This is necessary to avoid http-parser leaks.
+    res.upgrade = true;
+  }
+
+  function onUpgrade(res, socket, head) {
+    // Hacky.
+    process.nextTick(function() {
+      onConnect(res, socket, head);
+    });
+  }
+
+  function onConnect(res, socket, head) {
+    connectReq.removeAllListeners();
+    socket.removeAllListeners();
+
+    if (res.statusCode !== 200) {
+      debug('tunneling socket could not be established, statusCode=%d',
+        res.statusCode);
+      socket.destroy();
+      var error = new Error('tunneling socket could not be established, ' +
+        'statusCode=' + res.statusCode);
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    if (head.length > 0) {
+      debug('got illegal response body from proxy');
+      socket.destroy();
+      var error = new Error('got illegal response body from proxy');
+      error.code = 'ECONNRESET';
+      options.request.emit('error', error);
+      self.removeSocket(placeholder);
+      return;
+    }
+    debug('tunneling connection has established');
+    self.sockets[self.sockets.indexOf(placeholder)] = socket;
+    return cb(socket);
+  }
+
+  function onError(cause) {
+    connectReq.removeAllListeners();
+
+    debug('tunneling socket could not be established, cause=%s\n',
+          cause.message, cause.stack);
+    var error = new Error('tunneling socket could not be established, ' +
+                          'cause=' + cause.message);
+    error.code = 'ECONNRESET';
+    options.request.emit('error', error);
+    self.removeSocket(placeholder);
+  }
+};
+
+TunnelingAgent.prototype.removeSocket = function removeSocket(socket) {
+  var pos = this.sockets.indexOf(socket)
+  if (pos === -1) {
+    return;
+  }
+  this.sockets.splice(pos, 1);
+
+  var pending = this.requests.shift();
+  if (pending) {
+    // If we have pending requests and a socket gets closed a new one
+    // needs to be created to take over in the pool for the one that closed.
+    this.createSocket(pending, function(socket) {
+      pending.request.onSocket(socket);
+    });
+  }
+};
+
+function createSecureSocket(options, cb) {
+  var self = this;
+  TunnelingAgent.prototype.createSocket.call(self, options, function(socket) {
+    var hostHeader = options.request.getHeader('host');
+    var tlsOptions = mergeOptions({}, self.options, {
+      socket: socket,
+      servername: hostHeader ? hostHeader.replace(/:.*$/, '') : options.host
+    });
+
+    // 0 is dummy port for v0.6
+    var secureSocket = tls.connect(0, tlsOptions);
+    self.sockets[self.sockets.indexOf(socket)] = secureSocket;
+    cb(secureSocket);
+  });
+}
+
+
+function toOptions(host, port, localAddress) {
+  if (typeof host === 'string') { // since v0.10
+    return {
+      host: host,
+      port: port,
+      localAddress: localAddress
+    };
+  }
+  return host; // for v0.11 or later
+}
+
+function mergeOptions(target) {
+  for (var i = 1, len = arguments.length; i < len; ++i) {
+    var overrides = arguments[i];
+    if (typeof overrides === 'object') {
+      var keys = Object.keys(overrides);
+      for (var j = 0, keyLen = keys.length; j < keyLen; ++j) {
+        var k = keys[j];
+        if (overrides[k] !== undefined) {
+          target[k] = overrides[k];
+        }
+      }
+    }
+  }
+  return target;
+}
+
+
+var debug;
+if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) {
+  debug = function() {
+    var args = Array.prototype.slice.call(arguments);
+    if (typeof args[0] === 'string') {
+      args[0] = 'TUNNEL: ' + args[0];
+    } else {
+      args.unshift('TUNNEL:');
+    }
+    console.error.apply(console, args);
+  }
+} else {
+  debug = function() {};
+}
+exports.debug = debug; // for test
+
+
+/***/ }),
+
+/***/ 2357:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("assert");
+
+/***/ }),
+
 /***/ 3129:
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("child_process");;
+module.exports = require("child_process");
+
+/***/ }),
+
+/***/ 8614:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("events");
 
 /***/ }),
 
@@ -6981,7 +9038,31 @@ module.exports = require("child_process");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("fs");;
+module.exports = require("fs");
+
+/***/ }),
+
+/***/ 8605:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("http");
+
+/***/ }),
+
+/***/ 7211:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("https");
+
+/***/ }),
+
+/***/ 1631:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("net");
 
 /***/ }),
 
@@ -6989,7 +9070,7 @@ module.exports = require("fs");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("os");;
+module.exports = require("os");
 
 /***/ }),
 
@@ -6997,7 +9078,15 @@ module.exports = require("os");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("path");;
+module.exports = require("path");
+
+/***/ }),
+
+/***/ 4016:
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("tls");
 
 /***/ }),
 
@@ -7005,7 +9094,7 @@ module.exports = require("path");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("tty");;
+module.exports = require("tty");
 
 /***/ }),
 
@@ -7013,7 +9102,7 @@ module.exports = require("tty");;
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("util");;
+module.exports = require("util");
 
 /***/ })
 
@@ -7023,10 +9112,11 @@ module.exports = require("util");;
 /******/ 	var __webpack_module_cache__ = {};
 /******/ 	
 /******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
+/******/ 	function __nccwpck_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -7038,7 +9128,7 @@ module.exports = require("util");;
 /******/ 		// Execute the module function
 /******/ 		var threw = true;
 /******/ 		try {
-/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 			__webpack_modules__[moduleId].call(module.exports, module, module.exports, __nccwpck_require__);
 /******/ 			threw = false;
 /******/ 		} finally {
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
@@ -7051,11 +9141,16 @@ module.exports = require("util");;
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
-/******/ 	__webpack_require__.ab = __dirname + "/";/************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
+/******/ 	
+/************************************************************************/
+/******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(3109);
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(3109);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map

@@ -14,9 +14,11 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0
+
       - name: Get Git Changelog
         id: get_changelog
-        uses: thenilsdev/git-log-action@1.0.4
+        uses: finaldream/git-log-action@1.0
+
       - name: Create release
         id: create_release
         uses: actions/create-release@v1

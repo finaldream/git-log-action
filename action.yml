@@ -4,11 +4,11 @@ author: 'olivererdmann'
 runs:
   using: 'node16'
   main: 'dist/index.js'
-outputs:
+inputs:
   reverseLog:
     description: '"true" reverses the order of the log entries (oldest top)'
     required: false
-    default: "false"
+    default: 'false'
 outputs:
   log:
     description: 'the git log'
